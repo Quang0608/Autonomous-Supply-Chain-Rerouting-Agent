@@ -1,0 +1,2 @@
+port_id,name,country,latitude,longitude,source,source_reference,verified
+SAMPLE-PORT,Replace with a real port,Example Country,,,Replace with source,Replace with stable source record ID,false

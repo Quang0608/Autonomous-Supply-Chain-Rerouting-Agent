@@ -1,0 +1,12 @@
+{
+  "model_version": "1.0",
+  "port_handling_days": 1.0,
+  "minimum_transfer_hours": 12,
+  "vessel_speed_knots": 18,
+  "departure_frequency_days": 7,
+  "cost_per_teu_usd_per_nm": 0.08,
+  "fixed_service_cost_usd": 250,
+  "capacity_teu": 5000,
+  "cargo_classes": ["GENERAL_CONTAINER"],
+  "hubs": ["SGSIN", "NLRTM", "ZADUR", "ARBUE"]
+}

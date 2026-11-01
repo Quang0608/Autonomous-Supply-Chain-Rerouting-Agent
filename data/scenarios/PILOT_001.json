@@ -1,0 +1,14 @@
+{
+  "scenario_id": "PILOT_001",
+  "parent_almahri_scenario_id": null,
+  "type": "PORT_CLOSURE",
+  "port_id": "AEJEA",
+  "start_day": 0,
+  "end_day": 45,
+  "note": "Independent pilot logistics variant, not a claim about an AlMahri article",
+  "provenance": {
+    "source": "synthetic development data",
+    "seed": 42,
+    "upstream_sha256": "e5192809c1334d46893eea44c53cd2b527c939c2fb88c0e81c9e4e8bf60c784a"
+  }
+}

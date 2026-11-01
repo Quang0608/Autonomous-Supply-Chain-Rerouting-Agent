@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.pytest_cache/
+.DS_Store
+# Pilot output can be regenerated; decide whether to commit a frozen snapshot.
+/data/raw/*
+!/data/raw/.gitkeep
+/data/cache/
+/data/processed/*
+!/data/processed/.gitkeep
+/data/builds/*
+!/data/builds/.gitkeep
+
+# Retain only schema examples in the reference CSV directory.
+/data/reference/*.csv
+!/data/reference/*.sample.csv
+
+/data/scenarios/*provisional_reference.json
+
+# Local secrets, databases, and downloaded exports.
+.env
+.env.*
+!.env.example
+neo4j/data/
+neo4j/logs/
+*.dump
+
+# Local Codex task instructions are not project deliverables.
+CODEX_*.md
