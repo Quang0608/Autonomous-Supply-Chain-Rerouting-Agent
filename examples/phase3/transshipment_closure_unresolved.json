@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "p3_transshipment_closure_unresolved",
+  "events": [{"event_id":"event_close_sgsin_transfer","type":"PORT_CLOSURE","target_port_id":"SGSIN","start_time":"2025-09-26T11:15:47Z","end_time":"2025-09-27T00:00:00Z","affected_operations":["TRANSSHIPMENT"],"source_type":"SIMULATED"}]
+}

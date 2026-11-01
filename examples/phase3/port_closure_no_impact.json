@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "p3_port_closure_no_impact",
+  "events": [{"event_id":"event_closure_vnsgn_future","type":"PORT_CLOSURE","target_port_id":"VNSGN","start_time":"2040-01-01T00:00:00Z","end_time":"2040-01-02T00:00:00Z","affected_operations":["ARRIVAL","DEPARTURE","TRANSSHIPMENT"],"source_type":"SIMULATED"}]
+}

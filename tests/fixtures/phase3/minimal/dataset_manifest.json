@@ -1,0 +1,1 @@
+{"dataset_id":"synthetic-phase3-boundary-fixture","generator_version":"test-fixture-1","seed":42,"validation_status":"synthetic-test-only","counts":{"shipments":1,"route_plans":1,"planned_legs":2,"operational_ports":4,"services":2}}
