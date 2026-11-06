@@ -97,3 +97,15 @@ python -m unittest discover -s tests -v
 ```
 
 The analyzer writes scenario provenance, event and shipment impacts, no-recovery outcomes, and a summary under the output folder. Scenarios target canonical port/service IDs. Six engineering examples use IDs in the seed-42 build; they are code fixtures, not independent research ground truth. The no-recovery simulator preserves the initial itinerary: it does not allocate alternatives or rewrite shipment/plan records. A delay that makes a downstream transfer infeasible is reported as `UNRESOLVED_CONNECTION`; closures and suspensions are conservatively `BLOCKED` because waiting/rebooking is not represented as a reliable executable sailing. See [`docs/phase3_temporal_disruption_report.md`](docs/phase3_temporal_disruption_report.md) for detailed semantics and limitations.
+
+## Phase 4 deterministic recovery
+
+Phase 4 searches the existing directed modeled service graph from the first reachable recovery port. It uses canonical service frequency, transit time, modeled cost, cargo classes, and individual shipment capacity. Departures repeat from simulation day zero at each service's modeled frequency; these are synthetic schedules, not carrier bookings. The solver validates every selected route independently and keeps Phase 3 No Recovery results for comparison.
+
+```powershell
+python scripts/phase4_recovery.py validate-scenario --dataset data/builds/research_1500 --scenario examples/phase3/service_suspension.json
+python scripts/phase4_recovery.py recover --dataset data/builds/research_1500 --scenario examples/phase3/service_suspension.json --output data/simulations/phase4/service_suspension
+python scripts/phase4_recovery.py run-examples --dataset data/builds/research_1500 --examples examples/phase3 --output data/simulations/phase4/examples
+```
+
+Outputs stay under ignored `data/simulations/`. The result is shipment-level maritime recovery on a simulated graph. It does not establish real schedule availability, residual shared capacity, inland transport, or geographic chokepoint safety. See [`docs/phase4_deterministic_recovery_report.md`](docs/phase4_deterministic_recovery_report.md).

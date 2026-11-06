@@ -1,0 +1,8 @@
+[
+  {"service_id":"S-AB","origin_port_id":"P-A","destination_port_id":"P-B","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":1,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]},
+  {"service_id":"S-BC","origin_port_id":"P-B","destination_port_id":"P-C","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":1,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]},
+  {"service_id":"S-AD","origin_port_id":"P-A","destination_port_id":"P-D","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":2,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]},
+  {"service_id":"S-DC","origin_port_id":"P-D","destination_port_id":"P-C","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":2,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]},
+  {"service_id":"S-AE","origin_port_id":"P-A","destination_port_id":"P-E","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":2,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]},
+  {"service_id":"S-EC","origin_port_id":"P-E","destination_port_id":"P-C","departure_frequency_days":1,"transit_days":1,"min_transfer_hours":0,"cost_per_teu_usd":2,"capacity_teu":10,"cargo_classes":["GENERAL_CONTAINER"]}
+]
