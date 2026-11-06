@@ -53,7 +53,7 @@ Each scenario reconciled exactly 1,500 unique shipment IDs:
 
 Across these examples: `NO_FEASIBLE_ROUTE`, `DEADLINE_INFEASIBLE`, and `SEARCH_LIMIT_REACHED` are zero; the synthetic suite exercises route absence and search cutoff. The three selected canonical recoveries passed independent validation. Candidate failures in those runs are late alternatives, not selected recommendations. Six separate CLI measurements were 585–682 ms (median about 606 ms, nearest-rank p95 about 682 ms), including Python startup, file reads, search, and output writes. Wall-clock measurements are excluded from deterministic artifacts.
 
-Repeated synthetic outputs were byte-identical, including the manifest; Phase 4 does not write a run timestamp. The six canonical runs were also deterministic in sorted shipment and candidate order.
+Repeated synthetic outputs were byte-identical, including the manifest; Phase 4 does not write a run timestamp. Two complete six-scenario canonical runs produced 48 files each, with zero SHA-256 differences.
 
 ### Frozen canonical hashes
 
@@ -72,4 +72,4 @@ Added: `src/maritime/phase4.py`, `src/maritime/recovery_validation.py`, `scripts
 
 Future Phase 5 evaluation should use independently defined scenarios and licensed operational references. A later LLM Baseline C should call this same `recover` and `checks_for_route` interface and route universe, then compare its decisions with Baseline B.
 
-Git fix commit and push result: **PENDING FINAL GIT STEP**.
+Feature commit: `45b3ab156dd8959fe450d87928fd9b9f5eff0a77` (`feat: implement Phase 4 deterministic constrained shipment recovery`). Push to `origin/phase4-deterministic-recovery` succeeded; the branch tracks the remote. This report update records that push after it completed.
