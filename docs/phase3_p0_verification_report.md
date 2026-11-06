@@ -87,7 +87,7 @@ All six examples were run through `scripts/phase3_simulation.py simulate-no-reco
 
 ## Git record
 
-- Fix commit: `PENDING`
-- Push: `PENDING`
+- Fix commit: `f815e59a1643ca2909792df1b9eabbc28b891e25` (`fix: harden Phase 3 cascading delays and multi-event handling`)
+- Push: succeeded to `origin/phase3-temporal-disruptions` (`06ce6a7..f815e59`).
 
 P0 status is considered passed only after the full unittest suite, all six example runs, canonical hashes, and deterministic-output checks succeed.
