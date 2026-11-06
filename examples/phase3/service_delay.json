@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "p3_finite_service_delay",
+  "events": [{"event_id":"event_delay_svc_2ea64b2fee3ba2","type":"SERVICE_DELAY","target_service_id":"SVC-2ea64b2fee3ba2","start_time":"2025-09-24T00:00:00Z","end_time":"2025-09-24T06:00:00Z","delay_hours":72,"semantics":"DEPARTURE_WINDOW","source_type":"SIMULATED"}]
+}

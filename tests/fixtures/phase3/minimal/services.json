@@ -1,0 +1,1 @@
+[{"service_id":"TEST-SVC-AB","origin_port_id":"TEST-A","destination_port_id":"TEST-B","departure_frequency_days":7,"transit_days":2},{"service_id":"TEST-SVC-BC","origin_port_id":"TEST-B","destination_port_id":"TEST-C","departure_frequency_days":7,"transit_days":2}]

@@ -12,6 +12,8 @@ __pycache__/
 !/data/processed/.gitkeep
 /data/builds/*
 !/data/builds/.gitkeep
+/data/simulations/*
+!/data/simulations/.gitkeep
 
 # Retain only schema examples in the reference CSV directory.
 /data/reference/*.csv

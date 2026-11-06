@@ -82,3 +82,18 @@ The Compose service exposes the local Neo4j browser on port 7474 and Bolt on 768
 ## Limitations and next phase
 
 The model does not represent confirmed physical facilities, booked liner services, actual schedules, market prices, or allocated shared capacity. The current phase creates feasible initial route plans; it does not implement time-windowed disruptions, recovery optimization, an LLM routing agent, or independent ground truth. Phase 3 should add temporal disruption detection and deterministic recovery over the canonical dataset, then compare against an independent reference solver.
+
+## Phase 3 temporal disruption simulation
+
+Phase 3 adds a deterministic file-backed impact analyzer and no-recovery baseline. The canonical Phase 2 build remains frozen. Because its schedules are numeric day offsets rather than calendar timestamps, Phase 3 derives UTC timestamps in a separate schedule view using `2025-01-01T00:00:00Z` as day zero; one unit is 24 hours. This is a testable calendar anchor, not a claim about real sailing dates. Port operations use operation instants; transshipment occupancy is the modeled interval between a leg arrival and the next planned departure. Service suspension and delay use departure-in-window semantics and `[start_time, end_time)` boundaries.
+
+Run from PowerShell at the repository root:
+
+```powershell
+python scripts/phase3_simulation.py validate-scenario --dataset data/builds/research_1500 --scenario examples/phase3/port_closure_affected.json
+python scripts/phase3_simulation.py analyze-impact --dataset data/builds/research_1500 --scenario examples/phase3/service_delay.json --output data/simulations/phase3/service_delay
+python scripts/phase3_simulation.py simulate-no-recovery --dataset data/builds/research_1500 --scenario examples/phase3/overlapping_disruptions.json
+python -m unittest discover -s tests -v
+```
+
+The analyzer writes scenario provenance, event and shipment impacts, no-recovery outcomes, and a summary under the output folder. Scenarios target canonical port/service IDs. Six engineering examples use IDs in the seed-42 build; they are code fixtures, not independent research ground truth. The no-recovery simulator preserves the initial itinerary: it does not allocate alternatives or rewrite shipment/plan records. A delay that makes a downstream transfer infeasible is reported as `UNRESOLVED_CONNECTION`; closures and suspensions are conservatively `BLOCKED` because waiting/rebooking is not represented as a reliable executable sailing. See [`docs/phase3_temporal_disruption_report.md`](docs/phase3_temporal_disruption_report.md) for detailed semantics and limitations.

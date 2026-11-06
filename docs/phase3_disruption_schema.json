@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/maritime-reroute-agent/phase3-disruption-schema-1.0.json",
+  "title": "Phase 3 maritime disruption scenario",
+  "type": "object",
+  "required": ["schema_version", "scenario_id", "events"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["event_id", "type", "start_time", "end_time"],
+        "properties": {
+          "event_id": {"type": "string", "minLength": 1},
+          "type": {"enum": ["PORT_CLOSURE", "SERVICE_SUSPENSION", "SERVICE_DELAY"]},
+          "target_port_id": {"type": "string"},
+          "target_service_id": {"type": "string"},
+          "start_time": {"type": "string", "format": "date-time"},
+          "end_time": {"type": "string", "format": "date-time"},
+          "affected_operations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["ARRIVAL", "DEPARTURE", "TRANSSHIPMENT"]}},
+          "delay_hours": {"type": "number", "minimum": 0},
+          "semantics": {"const": "DEPARTURE_WINDOW"},
+          "source_type": {"type": "string"},
+          "description": {"type": "string"}
+        },
+        "allOf": [
+          {"if": {"properties": {"type": {"const": "PORT_CLOSURE"}}}, "then": {"required": ["target_port_id"]}},
+          {"if": {"properties": {"type": {"enum": ["SERVICE_SUSPENSION", "SERVICE_DELAY"]}}}, "then": {"required": ["target_service_id", "semantics"]}},
+          {"if": {"properties": {"type": {"const": "SERVICE_DELAY"}}}, "then": {"required": ["delay_hours"]}}
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
