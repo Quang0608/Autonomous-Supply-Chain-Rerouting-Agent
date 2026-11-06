@@ -119,65 +119,112 @@ def analyze(dataset_dir: Path, scenario_raw: dict) -> tuple[dict, list[dict], li
         plan = plan_by_id[shipment["route_plan_id"]]
         legs = plan["ordered_legs"]
         direct, indirect, causes = [], [], []
-        delayed = {}
+        delays_by_leg = {}
+
+        # Departure-window events use immutable planned departures. Arrival and
+        # transfer operations are checked later against the actual arrivals.
         for index, leg in enumerate(legs):
-            dep, arr = day_time(leg["planned_departure"]), day_time(leg["planned_arrival"])
-            service = service_by_id[leg["service_id"]]
+            dep = day_time(leg["planned_departure"])
             for event in scenario["events"]:
-                hit = False
-                reason = None
-                target_id = event.get("target_port_id", event.get("target_service_id"))
                 if event["type"] == "PORT_CLOSURE":
-                    target = event["target_port_id"]
-                    ops = event["affected_operations"]
-                    if "DEPARTURE" in ops and leg["origin_port_id"] == target and _inside(dep, event):
-                        hit, reason = True, "PORT_CLOSURE_DEPARTURE_OVERLAP"
-                    elif "ARRIVAL" in ops and leg["destination_port_id"] == target and _inside(arr, event):
-                        hit, reason = True, "PORT_CLOSURE_ARRIVAL_OVERLAP"
-                    elif "TRANSSHIPMENT" in ops and index < len(legs)-1 and leg["destination_port_id"] == target:
-                        transfer_end = day_time(legs[index+1]["planned_departure"])
-                        if _overlap(arr, transfer_end, event):
-                            hit, reason = True, "PORT_CLOSURE_TRANSFER_OCCUPANCY_OVERLAP"
-                elif service["service_id"] == event.get("target_service_id") and _inside(dep, event) and (event["type"] != "SERVICE_DELAY" or event["delay_hours"] > 0):
-                    hit = True
-                    reason = "SERVICE_SUSPENSION_DEPARTURE_OVERLAP" if event["type"] == "SERVICE_SUSPENSION" else "SERVICE_DELAY_DEPARTURE_OVERLAP"
-                if hit:
-                    direct.append((index, event, reason, target_id, dep if "DEPARTURE" in (reason or "") else arr))
-        # A closure controls the same leg departure when it overlaps a delay event.
-        closure_indexes = {i for i, e, reason, _, _ in direct if e["type"] == "PORT_CLOSURE" and "DEPARTURE" in reason}
-        direct = [x for x in direct if not (x[1]["type"] == "SERVICE_DELAY" and x[0] in closure_indexes)]
+                    if ("DEPARTURE" in event["affected_operations"]
+                            and leg["origin_port_id"] == event["target_port_id"]
+                            and _inside(dep, event)):
+                        direct.append((index, event, "PORT_CLOSURE_DEPARTURE_OVERLAP",
+                                       event["target_port_id"], dep))
+                elif service_by_id[leg["service_id"]]["service_id"] == event.get("target_service_id") and _inside(dep, event):
+                    if event["type"] == "SERVICE_SUSPENSION":
+                        direct.append((index, event, "SERVICE_SUSPENSION_DEPARTURE_OVERLAP",
+                                       event["target_service_id"], dep))
+                    elif event["delay_hours"] > 0:
+                        direct.append((index, event, "SERVICE_DELAY_DEPARTURE_OVERLAP",
+                                       event["target_service_id"], dep))
+
+        # A closure or suspension blocks the planned departure. Keep any
+        # simultaneous delay event in the evidence, but do not apply it.
+        blocked_departures = {
+            i for i, event, reason, _, _ in direct
+            if reason in ("PORT_CLOSURE_DEPARTURE_OVERLAP", "SERVICE_SUSPENSION_DEPARTURE_OVERLAP")
+        }
         for index, event, _, _, _ in direct:
-            if event["type"] == "SERVICE_DELAY":
-                delayed[index] = delayed.get(index, 0.0) + event["delay_hours"]
-        # Propagate modeled delay through the existing itinerary only. Never rebook a missed connection.
-        cumulative = 0.0
-        direct_indexes = {x[0] for x in direct}
+            if event["type"] == "SERVICE_DELAY" and index not in blocked_departures:
+                delays_by_leg[index] = delays_by_leg.get(index, 0.0) + event["delay_hours"]
+
+        # Resolve the itinerary in temporal order. Every downstream sailing
+        # stays fixed; a feasible connection absorbs inbound lateness.
+        actual_arrivals = {}
         for index, leg in enumerate(legs):
-            if index in delayed:
-                cumulative += delayed[index]
-            if cumulative and index not in direct_indexes:
+            if index in blocked_departures:
+                break
+            if index:
+                previous_arrival = actual_arrivals.get(index - 1)
+                if previous_arrival is None:
+                    break
                 dep = day_time(leg["planned_departure"])
-                prev_arr = day_time(legs[index-1]["planned_arrival"]) + timedelta(hours=cumulative) if index else dep
-                min_transfer = float(leg.get("min_transfer_hours", 0))
-                if index and prev_arr + timedelta(hours=min_transfer) > dep:
-                    indirect.append((index, leg, "UNRESOLVED_CONNECTION", cumulative))
-                elif index:
-                    indirect.append((index, leg, "CASCADED_ARRIVAL_DELAY", cumulative))
-        causes = []
+                min_transfer = timedelta(hours=float(leg.get("min_transfer_hours", 0)))
+                if previous_arrival + min_transfer > dep:
+                    causal_events = [e for i, e, _, _, _ in direct
+                                     if i == index - 1 and e["type"] == "SERVICE_DELAY"]
+                    for event in causal_events:
+                        indirect.append((index, leg, "UNRESOLVED_CONNECTION", event, previous_arrival))
+                    break
+                delay_hours = max(0.0, (previous_arrival - day_time(legs[index - 1]["planned_arrival"])).total_seconds() / 3600)
+                if delay_hours:
+                    causal_events = [e for i, e, _, _, _ in direct
+                                     if i == index - 1 and e["type"] == "SERVICE_DELAY"]
+                    for event in causal_events:
+                        indirect.append((index, leg, "RECOVERED_CONNECTION", event, previous_arrival))
+
+            arr = day_time(leg["planned_arrival"]) + timedelta(hours=delays_by_leg.get(index, 0.0))
+            actual_arrivals[index] = arr
+            arrival_blocked = False
+            for event in scenario["events"]:
+                if event["type"] != "PORT_CLOSURE":
+                    continue
+                if ("ARRIVAL" in event["affected_operations"]
+                        and leg["destination_port_id"] == event["target_port_id"]
+                        and _inside(arr, event)):
+                    direct.append((index, event, "PORT_CLOSURE_ARRIVAL_OVERLAP",
+                                   event["target_port_id"], arr))
+                    arrival_blocked = True
+                if (index < len(legs) - 1
+                        and arr < day_time(legs[index + 1]["planned_departure"])
+                        and "TRANSSHIPMENT" in event["affected_operations"]
+                        and leg["destination_port_id"] == event["target_port_id"]
+                        and _overlap(arr, day_time(legs[index + 1]["planned_departure"]), event)):
+                    direct.append((index, event, "PORT_CLOSURE_TRANSFER_OCCUPANCY_OVERLAP",
+                                   event["target_port_id"], arr))
+                    arrival_blocked = True
+            if arrival_blocked:
+                break
+
+        # De-duplicate event/operation matches, preserving every distinct ID.
+        unique_direct, direct_keys = [], set()
+        for item in direct:
+            key = (item[0], item[1]["event_id"], item[2])
+            if key not in direct_keys:
+                direct_keys.add(key)
+                unique_direct.append(item)
+        direct = unique_direct
         for index, event, reason, target, when in direct:
             item = {"event_id": event["event_id"], "target_entity_id": target,
                     "event_type": event["type"], "leg_id": f'{plan["route_plan_id"]}:L{index+1}',
-                    "service_id": legs[index]["service_id"], "operation": ("DEPARTURE" if "DEPARTURE" in reason else "ARRIVAL" if "ARRIVAL" in reason else "TRANSSHIPMENT"),
+                    "service_id": legs[index]["service_id"],
+                    "operation": ("DEPARTURE" if "DEPARTURE" in reason else "ARRIVAL" if "ARRIVAL" in reason else "TRANSSHIPMENT"),
                     "conflict_time": iso(when), "reason_code": reason}
-            if item not in causes: causes.append(item)
+            if event["type"] == "SERVICE_DELAY" and index in blocked_departures:
+                item["effect_applied"] = False
+                item["precedence"] = "DEPARTURE_BLOCKED"
+            causes.append(item)
             earliest = min(earliest, when) if earliest else when
             latest = max(latest, when) if latest else when
-        for index, leg, reason, hours in indirect:
-            causes.append({"event_id": next((e["event_id"] for e in scenario["events"] if e["type"] == "SERVICE_DELAY"), ""),
-                           "target_entity_id": leg["service_id"], "event_type": "SERVICE_DELAY",
-                           "leg_id": f'{plan["route_plan_id"]}:L{index+1}', "service_id": leg["service_id"],
-                           "operation": "DOWNSTREAM_CONNECTION", "conflict_time": iso(day_time(leg["planned_departure"])),
-                           "reason_code": reason, "propagated_delay_hours": round(hours, 6)})
+        for index, leg, reason, event, when in indirect:
+            previous_planned_arrival = day_time(legs[index - 1]["planned_arrival"])
+            causes.append({"event_id": event["event_id"], "target_entity_id": leg["service_id"],
+                           "event_type": "SERVICE_DELAY", "leg_id": f'{plan["route_plan_id"]}:L{index+1}',
+                           "service_id": leg["service_id"], "operation": "DOWNSTREAM_CONNECTION",
+                           "conflict_time": iso(when), "reason_code": reason,
+                           "propagated_delay_hours": round(max(0.0, (when - previous_planned_arrival).total_seconds() / 3600), 6)})
         if direct or indirect:
             direct_ids = sorted({x[0] for x in direct})
             indirect_ids = sorted({x[0] for x in indirect})
@@ -188,14 +235,16 @@ def analyze(dataset_dir: Path, scenario_raw: dict) -> tuple[dict, list[dict], li
                 "direct_leg_ids": direct_legs, "indirect_leg_ids": indirect_legs,
                 "original_eta": iso(day_time(plan["estimated_arrival"])),
                 "deadline": iso(day_time(shipment["delivery_deadline"])), "causes": causes})
-            status = "BLOCKED" if any(x["event_type"] in ("PORT_CLOSURE", "SERVICE_SUSPENSION") for x in causes) else "DELAYED"
-            if any(x["reason_code"] == "UNRESOLVED_CONNECTION" for x in causes): status = "UNRESOLVED_CONNECTION"
-            elif status == "DELAYED" and any(x["reason_code"] == "CASCADED_ARRIVAL_DELAY" for x in causes): status = "DELAYED"
-            if status == "DELAYED" and any(x["reason_code"] == "SERVICE_DELAY_DEPARTURE_OVERLAP" for x in causes):
-                event = next(e for e in scenario["events"] if e["type"] == "SERVICE_DELAY" and any(c["event_id"] == e["event_id"] for c in causes))
-                new_eta = day_time(plan["estimated_arrival"]) + timedelta(hours=event["delay_hours"])
-                if new_eta > day_time(shipment["delivery_deadline"]): status = "DEADLINE_MISSED"
-            eta = iso(day_time(plan["estimated_arrival"]) + timedelta(hours=sum(delayed.values()))) if status in ("DELAYED", "DEADLINE_MISSED") else None
+            if any(x["reason_code"] == "UNRESOLVED_CONNECTION" for x in causes):
+                status = "UNRESOLVED_CONNECTION"
+            elif any(x["event_type"] in ("PORT_CLOSURE", "SERVICE_SUSPENSION") for x in causes):
+                status = "BLOCKED"
+            else:
+                status = "DELAYED"
+            actual_final_eta = actual_arrivals.get(len(legs) - 1)
+            eta = iso(actual_final_eta) if actual_final_eta is not None else None
+            if status == "DELAYED" and actual_final_eta is not None and actual_final_eta > day_time(shipment["delivery_deadline"]):
+                status = "DEADLINE_MISSED"
             if status == "BLOCKED": reason = "NO_RECOVERY_POLICY_BLOCKED_OPERATION"
             elif status == "UNRESOLVED_CONNECTION": reason = "REBOOKING_POLICY_NOT_MODELED"
             elif status == "DEADLINE_MISSED": reason = "PROPAGATED_ETA_EXCEEDS_DEADLINE"
