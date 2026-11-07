@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "modeled-periodic-v1",
+  "departure_anchor_day": 0,
+  "departure_rule": "integer multiples of each canonical service departure_frequency_days from simulation epoch",
+  "max_hops": 4,
+  "horizon_days": 180,
+  "departures_per_service": 3,
+  "max_expansions": 20000,
+  "max_candidates": 2000,
+  "max_labels_per_port": 1000,
+  "objective": "deadline feasible, minimum additional modeled cost, earliest ETA, fewer legs, lexicographic service IDs",
+  "capacity_policy": "individual shipment TEU <= modeled service capacity; no residual booking allocation",
+  "arrival_closure_policy": "unresolved; no vessel diversion or holding modeled"
+}

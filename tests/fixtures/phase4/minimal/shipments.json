@@ -1,0 +1,1 @@
+[{"shipment_id":"SHIP-1","route_plan_id":"PLAN-1","origin_port_id":"P-A","destination_port_id":"P-C","release_day":1,"release_time":1,"delivery_deadline":6,"cargo_teu":1,"cargo_class":"GENERAL_CONTAINER"}]
