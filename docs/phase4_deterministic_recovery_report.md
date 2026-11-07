@@ -1,5 +1,7 @@
 # Phase 4 deterministic constrained recovery
 
+**Follow-up status contract (output schema 1.1):** Phase 4 recovery rows use `recovery_status`. `INSUFFICIENT_DATA` is deprecated and is not emitted. Cases where an essential operational fact or supported policy is missing use `OPERATOR_INTERVENTION_REQUIRED`, with a stable `reason_code`, shipment-specific `reason`, non-empty `missing_information`, and `recovery_plan: null`. Other failure statuses retain their existing meanings.
+
 Date: 2026-11-06. Branch: `phase4-deterministic-recovery`. Base: `9e513215e78129d09ac5797a04677dd5078f4cd8` (`origin/main`, containing Phase 3 P0 fix `f815e59a1643ca2909792df1b9eabbc28b891e25`). Dataset manifest: `data/builds/research_1500/dataset_manifest.json`, seed 42, validation passed. The 1,500 shipments, 1,500 plans, 2,936 legs, 33 operational ports, and 122 directed services were observed in the frozen build.
 
 ## Input audit and field mapping
@@ -18,11 +20,11 @@ Date: 2026-11-06. Branch: `phase4-deterministic-recovery`. Base: `9e513215e78129
 
 The Phase 2 planner's `next_departure` uses integer multiples of service frequency from day zero. Phase 4 uses that same recurrence, recorded as policy `modeled-periodic-v1` in `config/recovery_policy.json`. The fixed UTC epoch remains `2025-01-01T00:00:00Z`. Values describe a simulated network; service presence, schedule availability, cost, and capacity are not verified commercial facts. Historical AIS movement references do not prove a bookable sailing.
 
-Supported constraints: directed continuity, release/readiness, modeled periodic departures, minimum transfer, positive transit, event windows at actual operations, hard deadline, cargo class, individual TEU capacity, no cycles, bounded hops and horizon. Missing essential service frequency, duration, cost, cargo class, or capacity produces `INSUFFICIENT_DATA`. Unsupported: residual booked capacity, shared allocation across shipments, vessel/terminal capabilities, real handling slots, inland transport, geographic sea-lane/chokepoint exposure, and real market prices. These are not claimed as enforced.
+Supported constraints: directed continuity, release/readiness, modeled periodic departures, minimum transfer, positive transit, event windows at actual operations, hard deadline, cargo class, individual TEU capacity, no cycles, bounded hops and horizon. Missing essential service frequency, duration, cost, cargo class, or capacity produces `OPERATOR_INTERVENTION_REQUIRED` with reason code `ESSENTIAL_RECOVERY_DATA_MISSING`. Unsupported: residual booked capacity, shared allocation across shipments, vessel/terminal capabilities, real handling slots, inland transport, geographic sea-lane/chokepoint exposure, and real market prices. These are not claimed as enforced.
 
 ## Recovery state, algorithm, and objective
 
-The solver calls Phase 3 `analyze` and consumes its validated scenario, per-shipment causes, and No Recovery outcome. Unaffected shipments remain `UNCHANGED`. A delay absorbed by Phase 3 connection slack remains `NO_REROUTE_REQUIRED`. For a missed fixed connection, the last reachable port is the delayed inbound destination; the actual inbound arrival and required transfer determine readiness, and the inbound leg stays in the executed prefix. For a blocked future departure, the decision is made at that departure port no earlier than its planned departure or feasible inbound arrival. Arrival/transfer closures have no modeled vessel holding/diversion policy and yield `INSUFFICIENT_DATA`.
+The solver calls Phase 3 `analyze` and consumes its validated scenario, per-shipment causes, and No Recovery outcome. Unaffected shipments remain `UNCHANGED`. A delay absorbed by Phase 3 connection slack remains `NO_REROUTE_REQUIRED`. For a missed fixed connection, the last reachable port is the delayed inbound destination; the actual inbound arrival and required transfer determine readiness, and the inbound leg stays in the executed prefix. For a blocked future departure, the decision is made at that departure port no earlier than its planned departure or feasible inbound arrival. Arrival closures with unresolved actual position use `ARRIVAL_CLOSURE_POSITION_UNRESOLVED`; affected transfers without a safe handling/holding/departure policy use `TRANSSHIPMENT_HANDLING_POLICY_UNAVAILABLE`. Both produce `OPERATOR_INTERVENTION_REQUIRED` and no recovery plan. Missing required recovery inputs use `ESSENTIAL_RECOVERY_DATA_MISSING`. Ordinary route absence, deadline infeasibility, and search exhaustion retain `NO_FEASIBLE_ROUTE`, `DEADLINE_INFEASIBLE`, and `SEARCH_LIMIT_REACHED`.
 
 Search enumerates only existing directed services, at most three modeled departures per service from each state. It is bounded by four replacement hops, 180 days, 20,000 expansions, 2,000 complete candidates, and 1,000 labels per port/hop. It prunes a new label only when an earlier or equal, cheaper or equal label at the same port has a subset of visited ports. Queue and service order are deterministic. Budget exhaustion yields `SEARCH_LIMIT_REACHED`, even when a diagnostic valid candidate exists.
 
@@ -32,9 +34,17 @@ Each complete candidate goes through `recovery_validation.py`, which independent
 
 Closure and suspension block a candidate departure. Service delay applies only if that departure remains available. A delayed candidate arrival is checked against arrival closures; transfer occupancy uses actual inbound arrival and the proposed next departure. Phase 3 remains the authoritative source for original-plan impacts and No Recovery statuses. Unknown No Recovery ETA for blocked or unresolved cases is retained as null; no avoided-delay claim is made from it.
 
+## Operator-intervention follow-up
+
+Follow-up branch: `phase4-operator-intervention-recovery`, based on updated `origin/main` at `b9db10d`. The result schema and solver version are `1.1` and `phase4-recovery-1.1.0`; the recovery policy schema remains `1.0`.
+
+The `transshipment_closure_unresolved` integration scenario affects three canonical records: `SHIP-000001`, `SHIP-000997`, and `SHIP-EXP-000098`. Each Phase 3 cause identifies the affected first leg and `event_close_sgsin_transfer` at SGSIN. Their planned operations place them at or waiting through the modeled transshipment closure, but the records do not establish actual execution/cargo state or authorize safe waiting, unloading, transfer, or departure. All three therefore require operator intervention. No alternate vessel movement or recovery leg is emitted. The affected count remains three and the Phase 3 outcomes remain `BLOCKED`.
+
+Each intervention result includes `recovery_status`, a stable reason code, a shipment-specific explanation, a non-empty missing-information list, `recovery_plan: null`, and affected leg/event traceability. Result CSVs and comparison outputs use `recovery_status`; the prior `INSUFFICIENT_DATA` label is deprecated and retained only in historical instructions.
+
 ## Verification
 
-`python -m unittest discover -s tests -v`: **44 passed** (existing Phase 2 and Phase 3 tests plus 16 Phase 4 tests). The Phase 4 fixture uses fixed synthetic IDs and covers unchanged plans, suspension with a validated alternate, missed-connection position and immutable prefix, arrival closure without diversion, half-open closure boundaries, cost versus deadline ranking, late-only alternatives, cargo restrictions, delay-shifted candidate arrival closures, overlapping events, a cyclic graph, missing capacity, search cutoff, a deliberately invalid candidate rejected by the independent validator, and byte-stable repeated outputs. All six Phase 3 examples also ran unchanged through the Phase 3 CLI.
+`python -m unittest discover -s tests -v`: **46 passed** (existing Phase 2 and Phase 3 tests plus Phase 4 coverage). The Phase 4 fixture covers unchanged plans, suspension with a validated alternate, missed-connection position and immutable prefix, arrival closure requiring intervention, half-open closure boundaries, cost versus deadline ranking, late-only alternatives, cargo restrictions, delay-shifted candidate arrival closures, overlapping events, a cyclic graph, missing capacity requiring intervention, search cutoff, no-route classification, canonical three-shipment transshipment intervention, a deliberately invalid candidate rejected by the independent validator, and byte-stable repeated outputs. All six Phase 3 examples were rerun and their event impacts, shipment impacts, no-recovery results, and summaries matched the frozen Phase 3 P0 outputs. Phase 4 outputs for all six scenarios matched byte-for-byte across repeated runs. Phase 2 canonical dataset hashes remain identical to the recorded hashes above. The three selected canonical recoveries passed independent validation; the three operator-intervention results contain no recovery itinerary.
 
 Synthetic worked example: `SHIP-1` originally uses `S-AB,S-BC` for modeled cost 2 and ETA `2025-01-04T00:00:00Z`. Suspension `suspend-ab` blocks `S-AB` through the modeled deadline window. The solver selects `S-AD,S-DC`, modeled cost 4, ETA `2025-01-04T00:00:00Z`, deadline `2025-01-07T00:00:00Z`, additional modeled cost 2. Equal-cost `S-AE,S-EC` loses the lexicographic tie. The independent checks all pass for the selected path.
 
@@ -42,7 +52,7 @@ Synthetic worked example: `SHIP-1` originally uses `S-AB,S-BC` for modeled cost 
 
 Each scenario reconciled exactly 1,500 unique shipment IDs:
 
-| Phase 3 example | Affected | Attempted | Recovered | Unchanged | No reroute | Insufficient data | Validator pass/fail candidates |
+| Phase 3 example | Affected | Attempted | Recovered | Unchanged | No reroute | Operator intervention required | Validator pass/fail candidates |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | overlapping_disruptions | 1 | 1 | 1 | 1,499 | 0 | 0 | 1/1 |
 | port_closure_affected | 1 | 1 | 1 | 1,499 | 0 | 0 | 1/1 |

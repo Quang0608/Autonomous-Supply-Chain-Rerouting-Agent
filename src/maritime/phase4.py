@@ -12,13 +12,18 @@ from pathlib import Path
 from .phase3 import analyze, day_time, iso, load_json, parse_time, _inside, _overlap
 from .recovery_validation import checks_for_route
 
-VERSION = "phase4-recovery-1.0.0"
-SCHEMA = "1.0"
+VERSION = "phase4-recovery-1.1.0"
+SCHEMA = "1.1"
+POLICY_SCHEMA = "1.0"
+RECOVERY_STATUSES = (
+    "UNCHANGED", "NO_REROUTE_REQUIRED", "RECOVERED", "NO_FEASIBLE_ROUTE",
+    "DEADLINE_INFEASIBLE", "OPERATOR_INTERVENTION_REQUIRED", "SEARCH_LIMIT_REACHED",
+)
 
 
 def policy_at(path: Path) -> dict:
     policy = load_json(path)
-    if policy.get("schema_version") != SCHEMA or any(int(policy[k]) <= 0 for k in (
+    if policy.get("schema_version") != POLICY_SCHEMA or any(int(policy[k]) <= 0 for k in (
         "max_hops", "horizon_days", "departures_per_service", "max_expansions",
         "max_candidates", "max_labels_per_port"
     )):
@@ -47,9 +52,31 @@ def recovery_state(shipment, plan, impact, no_recovery, scenario):
     )]
     first_departure = min(blocking_departures, key=lambda c: (c["conflict_time"], c["leg_id"], c["event_id"])) if blocking_departures else None
     first_action_time = min((c["conflict_time"] for c in (unresolved, first_departure) if c), default=None)
-    if any(c["event_type"] == "PORT_CLOSURE" and c["operation"] in ("ARRIVAL", "TRANSSHIPMENT")
-           and (first_action_time is None or c["conflict_time"] <= first_action_time) for c in causes):
-        return None, "ARRIVAL_OR_TRANSFER_CLOSURE_HAS_NO_HOLDING_OR_DIVERSION_POLICY"
+    unsupported_closures = [c for c in causes if c["event_type"] == "PORT_CLOSURE"
+                            and c["operation"] in ("ARRIVAL", "TRANSSHIPMENT")
+                            and (first_action_time is None or c["conflict_time"] <= first_action_time)]
+    if unsupported_closures:
+        cause = min(unsupported_closures, key=lambda c: (c["conflict_time"], c["leg_id"], c["event_id"]))
+        if cause["operation"] == "ARRIVAL":
+            code = "ARRIVAL_CLOSURE_POSITION_UNRESOLVED"
+            missing = [
+                f"Actual position and movement state for shipment {shipment['shipment_id']} at arrival closure {cause['event_id']}",
+                f"Carrier-authorized diversion options for reaching or bypassing port {cause['target_entity_id']}",
+            ]
+            explanation = (f"Shipment {shipment['shipment_id']} has a planned arrival at closed port "
+                           f"{cause['target_entity_id']}; its actual position and authorized diversion options are unknown.")
+        else:
+            code = "TRANSSHIPMENT_HANDLING_POLICY_UNAVAILABLE"
+            missing = [
+                f"Actual cargo and vessel state for shipment {shipment['shipment_id']} at port {cause['target_entity_id']}",
+                f"Supported handling policy and authorization for waiting, unloading, transfer, or departure during closure {cause['event_id']}",
+            ]
+            explanation = (f"Shipment {shipment['shipment_id']} has an affected transshipment at "
+                           f"{cause['target_entity_id']}; the model cannot establish whether it can safely remain, be handled, or depart.")
+        return None, {"reason_code": code, "reason": explanation,
+                      "missing_information": missing,
+                      "affected_leg_ids": sorted({c["leg_id"] for c in unsupported_closures}),
+                      "event_ids": sorted({c["event_id"] for c in unsupported_closures})}
     if unresolved:
         index = int(unresolved["leg_id"].rsplit(":L", 1)[1]) - 1
         inbound_arrival = parse_time(unresolved["conflict_time"])
@@ -58,7 +85,14 @@ def recovery_state(shipment, plan, impact, no_recovery, scenario):
         ids = sorted({c["event_id"] for c in causes if c["reason_code"] == "UNRESOLVED_CONNECTION"})
     else:
         if not blocking_departures:
-            return None, "ARRIVAL_OR_TRANSFER_CLOSURE_HAS_NO_HOLDING_OR_DIVERSION_POLICY"
+            relevant = sorted(causes, key=lambda c: (c["conflict_time"], c["leg_id"], c["event_id"]))
+            event_ids = sorted({c["event_id"] for c in relevant})
+            leg_ids = sorted({c["leg_id"] for c in relevant})
+            return None, {"reason_code": "SAFE_RECOVERY_STATE_UNDETERMINED",
+                          "reason": f"Shipment {shipment['shipment_id']} is disrupted, but the available event evidence does not establish a safe recovery starting state.",
+                          "missing_information": ["Verified shipment position and execution state at the disruption time",
+                                                  "Supported operational decision policy for the detected disruption"],
+                          "affected_leg_ids": leg_ids, "event_ids": event_ids}
         first = first_departure
         index = int(first["leg_id"].rsplit(":L", 1)[1]) - 1
         arrival = day_time(shipment.get("release_time", shipment["release_day"])) if index == 0 else day_time(legs[index-1]["planned_arrival"])
@@ -204,34 +238,48 @@ def recover(dataset_dir: Path, scenario_raw: dict, policy: dict):
         common = {"shipment_id": sid, "plan_id": plan["route_plan_id"],
                   "no_recovery_status": no["status"], "original_plan": plan["ordered_legs"],
                   "original_eta": no["original_eta"], "no_recovery_eta": no["baseline_eta"],
+                  "affected_leg_ids": sorted({leg for leg in ((impact or {}).get("direct_leg_ids", []) + (impact or {}).get("indirect_leg_ids", []))}),
                   "deadline": no["deadline"], "event_ids": sorted({
                       c["event_id"] for c in impact["causes"] if c["event_id"]
                   }) if impact else []}
         if impact is None:
-            results.append(dict(common, status="UNCHANGED", reason_code="NO_PHASE3_IMPACT",
+            results.append(dict(common, recovery_status="UNCHANGED", reason_code="NO_PHASE3_IMPACT",
                                 recovered_eta=no["baseline_eta"], replacement_suffix=[]))
             continue
         if no["status"] == "DELAYED" and no["baseline_eta"] is not None:
-            results.append(dict(common, status="NO_REROUTE_REQUIRED", reason_code="FIXED_CONNECTION_RECOVERED",
+            results.append(dict(common, recovery_status="NO_REROUTE_REQUIRED", reason_code="FIXED_CONNECTION_RECOVERED",
                                 recovered_eta=no["baseline_eta"], replacement_suffix=[]))
             continue
         if no["status"] == "DEADLINE_MISSED" and no["baseline_eta"] is not None:
-            results.append(dict(common, status="DEADLINE_INFEASIBLE",
+            results.append(dict(common, recovery_status="DEADLINE_INFEASIBLE",
                                 reason_code="ARRIVAL_AFTER_DEADLINE_WITH_NO_IN_TRANSIT_DIVERSION",
                                 recovered_eta=None, replacement_suffix=[], late_diagnostic_eta=no["baseline_eta"]))
             continue
-        state, error = recovery_state(shipment, plan, impact, no, scenario)
-        if error:
-            results.append(dict(common, status="INSUFFICIENT_DATA", reason_code=error,
-                                recovered_eta=None, replacement_suffix=[]))
+        state, intervention = recovery_state(shipment, plan, impact, no, scenario)
+        if intervention:
+            results.append(dict(common, recovery_status="OPERATOR_INTERVENTION_REQUIRED",
+                                reason_code=intervention["reason_code"], reason=intervention["reason"],
+                                missing_information=intervention["missing_information"], recovery_plan=None,
+                                affected_leg_ids=sorted(set(common["affected_leg_ids"]) | set(intervention["affected_leg_ids"])),
+                                event_ids=sorted(set(common["event_ids"]) | set(intervention["event_ids"])),
+                                recovered_eta=None))
             continue
         states.append(state)
         diagnostics["attempted"] += 1
-        if any(k not in service or service[k] is None for service in services for k in (
-            "departure_frequency_days", "transit_days", "cost_per_teu_usd", "cargo_classes", "capacity_teu"
-        )) or any(k not in shipment for k in ("cargo_class", "cargo_teu", "delivery_deadline")):
-            results.append(dict(common, status="INSUFFICIENT_DATA", reason_code="ESSENTIAL_SERVICE_OR_CARGO_FIELD_MISSING",
-                                recovered_eta=None, replacement_suffix=[]))
+        missing = []
+        required_service_fields = ("departure_frequency_days", "transit_days", "cost_per_teu_usd", "cargo_classes", "capacity_teu")
+        for service in services:
+            missing.extend(f"Service {service.get('service_id', '<unknown>')} is missing {field}"
+                           for field in required_service_fields if field not in service or service[field] is None)
+        required_shipment_fields = ("cargo_class", "cargo_teu", "delivery_deadline")
+        missing.extend(f"Shipment {sid} is missing {field}"
+                       for field in required_shipment_fields if field not in shipment or shipment[field] is None)
+        if missing:
+            results.append(dict(common, recovery_status="OPERATOR_INTERVENTION_REQUIRED",
+                                reason_code="ESSENTIAL_RECOVERY_DATA_MISSING",
+                                reason=f"Shipment {sid} cannot be evaluated safely because required recovery data is missing.",
+                                missing_information=missing, recovery_plan=None,
+                                recovered_eta=None))
             continue
         candidates, stats = _search(shipment, state, services, scenario, policy)
         diagnostics["expansions"] += stats["expansions"]
@@ -251,7 +299,7 @@ def recover(dataset_dir: Path, scenario_raw: dict, policy: dict):
         rank = lambda x: (x["modeled_cost_usd"], x["eta"], len(x["replacement_suffix"]),
                           tuple(y["service_id"] for y in x["replacement_suffix"]))
         if stats["search_limited"]:
-            results.append(dict(common, status="SEARCH_LIMIT_REACHED", reason_code="SEARCH_LIMIT_REACHED",
+            results.append(dict(common, recovery_status="SEARCH_LIMIT_REACHED", reason_code="SEARCH_LIMIT_REACHED",
                                 recovery_state=state, replacement_suffix=[], recovered_eta=None,
                                 validated_candidate_diagnostic=min(valid, key=rank) if valid else None))
         elif valid:
@@ -259,7 +307,7 @@ def recover(dataset_dir: Path, scenario_raw: dict, policy: dict):
             prefix_cost = sum(float(x.get("modeled_cost_usd", 0)) for x in state["executed_prefix"])
             original_cost = plan.get("total_cost_usd")
             revised_cost = round(prefix_cost + best["modeled_cost_usd"], 2)
-            results.append(dict(common, status="RECOVERED", reason_code="VALIDATED_ALTERNATE",
+            results.append(dict(common, recovery_status="RECOVERED", reason_code="VALIDATED_ALTERNATE",
                                 recovery_state=state, executed_prefix=state["executed_prefix"],
                                 unexecuted_original_suffix=state["unexecuted_original_suffix"],
                                 replacement_suffix=best["replacement_suffix"],
@@ -271,13 +319,10 @@ def recover(dataset_dir: Path, scenario_raw: dict, policy: dict):
             status = "SEARCH_LIMIT_REACHED" if stats["search_limited"] else (
                 "DEADLINE_INFEASIBLE" if late else "NO_FEASIBLE_ROUTE"
             )
-            results.append(dict(common, status=status, reason_code=status,
+            results.append(dict(common, recovery_status=status, reason_code=status,
                                 recovery_state=state, replacement_suffix=[], recovered_eta=None,
                                 late_diagnostic=min(late, key=rank) if late else None))
-    counts = {status: sum(x["status"] == status for x in results) for status in (
-        "UNCHANGED", "NO_REROUTE_REQUIRED", "RECOVERED", "NO_FEASIBLE_ROUTE",
-        "DEADLINE_INFEASIBLE", "INSUFFICIENT_DATA", "SEARCH_LIMIT_REACHED"
-    )}
+    counts = {status: sum(x["recovery_status"] == status for x in results) for status in RECOVERY_STATUSES}
     summary = {"schema_version": SCHEMA, "scenario_id": scenario["scenario_id"],
                "total_shipments": len(shipments), "affected_shipments": len(impacts),
                "attempted": diagnostics["attempted"], "statuses": counts,
@@ -316,7 +361,7 @@ def write_outputs(dataset_dir: Path, scenario_raw: dict, policy_path: Path, out_
              "comparison_no_recovery.json": [
                  {"shipment_id": row["shipment_id"], "no_recovery_status": row["status"],
                   "no_recovery_eta": row["baseline_eta"],
-                  "recovery_status": recovered["status"], "recovered_eta": recovered.get("recovered_eta"),
+                  "recovery_status": recovered["recovery_status"], "recovered_eta": recovered.get("recovered_eta"),
                   "additional_cost_usd": recovered.get("additional_cost_usd"),
                   "additional_delay_hours": recovered.get("additional_delay_hours")}
                  for row, recovered in zip(result["no_recovery"], result["recovery_results"])
@@ -325,9 +370,10 @@ def write_outputs(dataset_dir: Path, scenario_raw: dict, policy_path: Path, out_
     for name, value in files.items():
         (out_dir/name).write_text(json.dumps(value,sort_keys=True,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     with (out_dir/"recovery_results.csv").open("w",encoding="utf-8",newline="") as stream:
-        writer = csv.DictWriter(stream,fieldnames=["shipment_id","status","reason_code","original_eta",
-                                                   "no_recovery_eta","recovered_eta","deadline","event_ids"])
+        writer = csv.DictWriter(stream,fieldnames=["shipment_id","recovery_status","reason_code","reason",
+                                                   "missing_information","recovery_plan","original_eta",
+                                                   "no_recovery_eta","recovered_eta","deadline","affected_leg_ids","event_ids"])
         writer.writeheader()
         for row in result["recovery_results"]:
-            writer.writerow({k: json.dumps(row[k]) if k == "event_ids" else row.get(k) for k in writer.fieldnames})
+            writer.writerow({k: json.dumps(row.get(k)) if k in ("event_ids", "affected_leg_ids", "missing_information", "recovery_plan") else row.get(k) for k in writer.fieldnames})
     return result["summary"]
