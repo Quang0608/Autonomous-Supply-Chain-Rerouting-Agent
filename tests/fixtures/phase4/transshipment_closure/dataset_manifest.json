@@ -1,0 +1,13 @@
+{
+    "dataset_id":  "phase4-transshipment-closure-regression",
+    "counts":  {
+                   "route_plans":  3,
+                   "shipments":  3,
+                   "services":  7,
+                   "ports":  8
+               },
+    "source_dataset_sha256":  "B2323FC9C0B3D251BB234346157770E66746EAEAED4C51063A3CD59B9759FF46",
+    "validation_status":  "regression-snapshot-from-research_1500",
+    "seed":  42,
+    "generator_version":  "test-fixture-1"
+}
