@@ -26,12 +26,12 @@ The catalog covers exactly:
 
 | Category | Count | Coverage intent |
 |---|---:|---|
-| Port closures | 3 | Departure blocking with alternate-route opportunity; arrival/transfer closure with unsupported operational state; no-impact closure |
-| Service suspensions | 3 | Alternative recovery; no feasible path or deadline limitation; no shipment impact |
+| Port closures | 3 | Departure blocking with alternate-route opportunity; fully specified arrival and transshipment closures that require operational intervention |
+| Service suspensions | 3 | Alternative recovery; no feasible path or deadline limitation; temporal relevance filtering when no planned departure is in the event window |
 | Service delays | 3 | Delay absorbed by schedule slack; delay causing a missed connection; overlapping/compounding downstream effects |
 | Compound disruptions | 2 | Interacting supported events, including overlapping events and multi-leg consequences |
-| No-impact scenarios | 2 | Valid event outside shipment operations/time window and a disruption affecting no shipment |
-| Missing information / operator intervention | 2 | Arrival closure with unknown vessel state; transshipment closure with absent handling policy |
+| No-impact scenarios | 2 | A port closure with no overlapping operations and a service-event end boundary exactly equal to a planned departure (excluded by `[start_time,end_time)`) |
+| Missing information / operator intervention | 2 | Incomplete/ambiguous arrival notice requiring clarification; transshipment case requiring evidence review before identifying the unsupported handling policy |
 | **Total** | **15** | |
 
 These are coverage labels, not additional event types. Each input will use only the three supported semantics. Cases should be selected from the frozen dataset after inspecting actual routes, times, and modeled network. No canonical IDs, timestamps, impacted shipment counts, or outcome labels are asserted here. If a proposed case cannot be constructed as intended on the frozen dataset, record it as unverified/unavailable and select a justified replacement during the later construction phase; do not silently alter its expected behavior.
@@ -50,28 +50,29 @@ The following are provisional roles, not a requirement for five separate CrewAI 
 | Recovery Review Agent | Candidate plan, validation checks, constraints | Review disposition and any failed/unsupported checks | Correctly interprets PASS/FAIL/UNSUPPORTED; rejects invalid recommendations; does not equate PASS with optimality |
 | Decision and Reporting Agent | Prior tool results, validation, scenario labels | Grounded recommendations, status, rationale, intervention request where needed | Recommendations trace to evidence; classifications correct; states uncertainty/limits; no unsupported maritime claims |
 
-Capture per-role input/output or trace references where the framework permits. Score capability-level criteria even if the architecture merges roles. Natural-language interpretation is assessed against the independently authored structured event labels; exact wording is not required.
+Capture per-role input/output or trace references where the framework permits. Score capability-level criteria even if the architecture merges roles. Each evaluated case starts with a synthetic maritime disruption notice in natural language; the correct structured event is a hidden reference, not agent input. Assess the Disruption Intelligence Agent's generated event and uncertainty against that independent reference. For incomplete notices, expected behavior is to request clarification or leave interpretation explicitly unresolved, not to manufacture an event for Phase 3.
 
 ### B. End-to-end correctness
 
 For each scenario/run, evaluate:
 
-1. **Event interpretation:** event types, target IDs, times, operation scope, delay amount, and explicit uncertainty match the expected labels.
+1. **Event interpretation:** from the natural-language notice, event types, target IDs, times, operation scope, delay amount, and explicit uncertainty match the hidden reference event/outcome. The correct structured JSON is never provided as the agent's input. For an incomplete notice, score whether the agent identifies missing information and refrains from submitting a fabricated event.
 2. **Impact identification:** reported affected shipment IDs equal the independently reconciled expected set; per-shipment direct/indirect reason and leg are consistent with reference calculations.
 3. **Recovery classification:** each relevant shipment is correctly classified (including unchanged, no-reroute, recovered, infeasible, search-limited, or operator-required) under the modeled assumptions.
 4. **Plan feasibility:** any recommended route is complete and its constraints are independently checked. A recommendation with a failed or unsupported required check is invalid. Compare the agent's plan with Phase 4's candidate, but independently recalculate route constraints and do not assume the solver's selection is ground truth.
 5. **Grounded final decision:** each recommendation or intervention request cites the relevant tool result/evidence. Unsupported claims or a route recommendation where the tool returned no plan count as incorrect.
 
-Useful measures (report numerator and denominator, with per-case results):
+Keep the independent reference outcome separate from the observed Phase 4 execution status. Label independent recovery feasibility as feasible, infeasible within an explicitly verified scope, unknown, or not applicable; retain independently verified route evidence; and state the safe agent behavior. Separately record the exact Phase 4 status returned. For example, independently verified route feasibility can coexist with Phase 4 `SEARCH_LIMIT_REACHED`; the reference remains feasible, while the observed solver result is inconclusive. `NO_FEASIBLE_ROUTE` is a bounded solver result, not global mathematical infeasibility; `OPERATOR_INTERVENTION_REQUIRED` signals missing essential facts/policy, not ordinary search failure. Validator PASS establishes checked modeled feasibility, not globally optimal recovery.
+
+Useful measures (report raw counts and numerator/denominator with per-case results):
 
 - Event field exact-match rate = correctly interpreted required fields / required labeled fields.
-- Shipment precision = TP/(TP+FP), recall = TP/(TP+FN), and F1; additionally report exact affected-set match rate across scenarios.
-- Recovery decision accuracy = correctly classified labeled shipment decisions / all labeled shipment decisions.
-- Valid recommendation rate = recommended plans passing all applicable independent checks / all recommended plans. Also report invalid plan count directly.
+- Shipment precision = TP/(TP+FP); recall = TP/(TP+FN); F1 = 2TP/(2TP+FP+FN), where TP, FP, and FN are shipment-level true positives, false positives, and false negatives against the independent affected set. If a metric's required denominator is zero, report `N/A`, not 100%. When both expected and predicted affected sets are empty, report an exact affected-set match; if the expected set is empty and the predicted set is non-empty, count the predictions as false positives and the exact-set match as incorrect. Always report TP/FP/FN counts with rates.
+- Recovery decision accuracy = correctly classified shipment-scenario decisions / all independently labeled, scorable shipment-scenario decisions. The population includes each applicable reference recovery class; report the denominator and counts by class. Intervention classification accuracy is calculated over all scorable shipment-scenario decisions labeled intervention-required or not intervention-required, with correct intervention and non-intervention counts and the total denominator stated. Keep input-level unresolved notices as a separate interpretation/clarification population.
+- Valid recommendation rate = recommended plans passing all applicable independent checks / all recommended plans. If no plan is recommended, report plan validity as `N/A`; separately count correct abstentions and correct non-recovery decisions against the reference outcome. Also report invalid plan count directly.
 - Evidence support rate = final factual claims supported by recorded tool/evidence references / audited factual claims.
-- Intervention classification accuracy = correct intervention-required/non-required labels / applicable decisions.
 
-An abstention is correct where the independent label calls for missing information or unsupported policy. Do not reward a confident guess for a case labeled ambiguous.
+If any required denominator above is zero, report the metric as `N/A`. Report ambiguous/unverifiable labels and failed/incomplete runs explicitly. Run completion rate uses all 45 planned runs as its denominator. Do not silently exclude failed runs: show failed/missing outputs and their counts alongside output-level metric denominators. An abstention is correct where the independent label calls for missing information or unsupported policy. Do not reward a confident guess for a case labeled ambiguous. These are descriptive measures for 15 selected scenarios, not estimates for a broader population.
 
 ### C. Reliability and robustness
 
@@ -93,9 +94,9 @@ Deterministic correctness and LLM reliability are separate: Phase 3/4 regression
 Use a lightweight, auditable reference process suitable for one student without assumed access to domain experts:
 
 1. Freeze the canonical dataset and recovery policy snapshots for scenario design. Select actual targets and event times by inspecting the relevant records; retain IDs only in the later scenario artifacts, not this planning catalog.
-2. Write scenario input and expected labels independently before examining agent outputs. Record the expected event fields, affected shipments/reasons, expected recovery classification, feasible route evidence if known, and missing-information handling.
+2. Write each agent-facing natural-language notice, hidden reference event/outcome, and expected labels independently before examining agent outputs. The notice is the primary input to the Disruption Intelligence Agent; its generated structured event is checked against the hidden reference. Only a complete, validated generated event may be passed to Phase 3. For incomplete-input cases such as SC-014, record that no valid event can be produced without clarification and score clarification/unresolved handling instead.
 3. Reconcile Phase 3 impact labels against a separate hand-check/reference calculation: enumerate planned legs and compare operation instants or transfer intervals to `[start,end)`; apply departure-window semantics for service events; derive delay propagation and downstream connection conflict from recorded plan times. A small independent spreadsheet/script may assist later, but must not call Phase 3 as its sole label source.
-4. For route outcomes, manually inspect directed service edges, frequency departures from the configured epoch, transit times, transfer readiness, closure/suspension/delay interactions, cargo class, individual capacity, horizon, hop bound, and hard deadline. Independently recompute candidate route timing and modeled cost. Use Phase 4 validator output as corroborating evidence, not independent truth. For a “no feasible route” label, exhaustively enumerate the bounded modeled search space or otherwise provide a defensible exhaustive argument under the frozen policy; if search was limited or completeness cannot be shown, label the result inconclusive rather than impossible.
+4. For route outcomes, independently label feasibility as feasible, infeasible within a stated and exhaustively checked scope, unknown, or not applicable. Manually inspect directed service edges, frequency departures from the configured epoch, transit times, transfer readiness, closure/suspension/delay interactions, cargo class, individual capacity, horizon, hop bound, and hard deadline. Independently recompute candidate route timing and modeled cost, retaining feasible route evidence where found. Use Phase 4 validator output as corroborating evidence, not independent truth. Preserve its actual execution status separately: an independently verified feasible route may coexist with `SEARCH_LIMIT_REACHED`; do not rewrite either record. `NO_FEASIBLE_ROUTE` is not global infeasibility, `OPERATOR_INTERVENTION_REQUIRED` is not ordinary search failure, and validator PASS does not establish global optimality. If exhaustive verification is not possible, use `UNKNOWN` for independent feasibility and report the solver's status as observed.
 5. Review all labels for internal consistency and preserve evidence and calculation steps. A qualified maritime expert is not guaranteed; do not claim expert validation unless one actually participates. Describe labels as student-verified against the modeled dataset and explicit rules.
 
 ## Reproducibility, validity and limitations
