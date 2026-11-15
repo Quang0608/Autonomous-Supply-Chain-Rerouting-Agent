@@ -1,0 +1,6 @@
+SIMULATED MARITIME OPERATIONS NOTICE — NOT AN AUTHENTIC CARRIER ADVISORY
+
+For the simulated schedule, service SVC-35a7482f2af1d0 departing on
+1 October 2025 at 00:00 UTC is expected to arrive one hour later than its
+scheduled arrival. The one-hour delay applies to departures of this service
+from 00:00 UTC through, but not including, 01:00 UTC on 1 October 2025.

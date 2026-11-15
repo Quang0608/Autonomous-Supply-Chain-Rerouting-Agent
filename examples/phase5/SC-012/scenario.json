@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "SC-012",
+  "events": [
+    {
+      "event_id": "SC-012-E1",
+      "type": "PORT_CLOSURE",
+      "target_port_id": "ARBUE",
+      "start_time": "2025-01-01T00:00:00Z",
+      "end_time": "2025-01-02T00:00:00Z",
+      "affected_operations": ["ARRIVAL", "DEPARTURE", "TRANSSHIPMENT"],
+      "source_type": "SYNTHETIC_SIMULATED_NOTICE",
+      "description": "Temporary closure of all supported operations at Port of Buenos Aires."
+    }
+  ]
+}
