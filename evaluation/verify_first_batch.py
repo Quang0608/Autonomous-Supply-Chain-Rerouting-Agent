@@ -21,6 +21,13 @@ EPOCH = datetime(2025, 1, 1, tzinfo=timezone.utc)
 MICROSECONDS_PER_DAY = Decimal(86_400_000_000)
 MICROSECONDS_PER_HOUR = Decimal(3_600_000_000)
 SCENARIOS = ("SC-002", "SC-007", "SC-012")
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+SC007_EXPECTED_SHIPMENTS = ["SHIP-000001"]
+SC007_EXPECTED_DIRECT_LEG = "PLAN-SHIP-000001:L2"
+
+
+class ScenarioAssumptionError(ValueError):
+    """A frozen candidate no longer satisfies the assumptions being labeled."""
 
 
 def sha256(path: Path) -> str:
@@ -177,17 +184,15 @@ def base_label(sid, scenario_path, notice_path, hashes, policy_path, commit, dat
         event_record["delay_hours"] = event["delay_hours"]
     return {
         "scenario_id": sid, "label_version": "1.0", "verification_status": "VERIFIED",
-        "agent_notice_ref": {"path": str(notice_path.as_posix()), "sha256": sha256(notice_path)},
+        "agent_notice_ref": {
+            "path": f"examples/phase5/{sid}/notice.txt", "sha256": sha256(notice_path),
+        },
         "hidden_reference_event": {
             "valid_event_expected": True, "events": [event_record],
             "unresolved_fields": [], "required_clarification": [],
         },
         "expected_impact": {}, "expected_recovery": [], "expected_missing_information": [],
         "evidence_refs": [], "independent_calculation": {},
-        "observed_execution": {
-            "comparison_status": "PENDING_SEPARATE_CORROBORATION",
-            "phase3": None, "phase4": None,
-        },
         "provenance": provenance(sid, scenario_path, notice_path, hashes, policy_path, commit, date),
         "verification_method": {
             "method": "Independent raw-record reconstruction; no Phase 3/Phase 4 modules are imported or called to generate expected labels.",
@@ -198,9 +203,9 @@ def base_label(sid, scenario_path, notice_path, hashes, policy_path, commit, dat
     }
 
 
-def verify_sc002(dataset, hashes, ports, ship_by_id, plans, policy_path, commit, date):
+def verify_sc002(scenario_root, hashes, ports, ship_by_id, plans, policy_path, commit, date):
     sid = "SC-002"
-    scenario_path = Path("examples/phase5") / sid / "scenario.json"
+    scenario_path = scenario_root / sid / "scenario.json"
     notice_path = scenario_path.with_name("notice.txt")
     scenario, event, start, end = scenario_event(scenario_path, sid)
     if event.get("type") != "PORT_CLOSURE" or event.get("target_port_id") != "SGSIN" or event.get("affected_operations") != ["ARRIVAL"]:
@@ -232,11 +237,13 @@ def verify_sc002(dataset, hashes, ports, ship_by_id, plans, policy_path, commit,
     label["expected_impact"] = {
         "affected_shipments": affected_labels,
         "affected_shipment_ids": impacted,
+        "unaffected_shipment_ids": sorted(set(ship_by_id) - set(impacted)),
         "unaffected_shipments_or_cohort_rule": "All other shipment IDs among the 1,500 shipment/plan joins in research_1500; every planned SGSIN arrival was enumerated.",
         "unaffected_shipment_count": len(ship_by_id) - len(impacted),
     }
     label["expected_recovery"] = [{
         "shipment_id": shipment_id, "independent_feasibility": "UNKNOWN", "reference_routes": [],
+        "expected_recovery_status": "OPERATOR_INTERVENTION_REQUIRED",
         "expected_safe_agent_behavior": "Request operator intervention; do not propose a replacement route or claim route infeasibility.",
         "reason": "A planned arrival is inside the closure, but the frozen model provides no actual vessel position/movement state at that time and the recovery policy explicitly leaves arrival closure handling unresolved with no vessel diversion or holding modeled.",
         "required_constraints": ["Do not infer vessel position or movement state.", "Do not invent authorized diversion options.", "Do not assume waiting/holding or arrival handling is permitted."],
@@ -262,9 +269,44 @@ def verify_sc002(dataset, hashes, ports, ship_by_id, plans, policy_path, commit,
     return label
 
 
-def verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, commit, date):
+def enforce_sc007_assumptions(impacted, matches, connection_evidence, delay, target_service_id):
+    connections = [c for shipment in connection_evidence for c in shipment["downstream_connections"]]
+    checks = {
+        "intended_affected_cohort": impacted == SC007_EXPECTED_SHIPMENTS,
+        "one_hour_delay": delay == timedelta(hours=1),
+        "expected_direct_service_delay": (
+            len(matches) == 1
+            and matches[0][3]["shipment_id"] == "SHIP-000001"
+            and matches[0][3]["leg_id"] == SC007_EXPECTED_DIRECT_LEG
+            and matches[0][3]["service_id"] == target_service_id
+            and matches[0][3]["operation"] == "DEPARTURE"
+        ),
+        "downstream_fixed_connection_exists": bool(connection_evidence) and bool(connections),
+        "downstream_fixed_connection_feasible": bool(connections) and all(c["connection_feasible"] for c in connections),
+        "remaining_transfer_slack_nonnegative": bool(connections) and all(c["remaining_slack_seconds"] >= 0 for c in connections),
+        "final_eta_meets_deadline": bool(connection_evidence) and all(x["deadline_met"] for x in connection_evidence),
+    }
+    checks["no_alternative_recovery_route_required"] = (
+        checks["intended_affected_cohort"]
+        and checks["downstream_fixed_connection_exists"]
+        and checks["downstream_fixed_connection_feasible"]
+        and checks["remaining_transfer_slack_nonnegative"]
+        and checks["final_eta_meets_deadline"]
+    )
+    failed = [key for key, passed in checks.items() if not passed]
+    if failed:
+        diagnostic = {"failed_assumptions": failed, "assumption_checks": checks,
+                      "affected_shipment_ids": impacted, "connection_calculations": connection_evidence}
+        raise ScenarioAssumptionError("SC-007 candidate no longer supports its verified no-reroute label: "
+                                      + json.dumps(json_ready(diagnostic), sort_keys=True))
+    for calculation in connection_evidence:
+        calculation["safe_recovery_decision"] = "NO_REROUTE_REQUIRED"
+    return checks
+
+
+def verify_sc007(scenario_root, hashes, services, ship_by_id, plans, policy_path, commit, date):
     sid = "SC-007"
-    scenario_path = Path("examples/phase5") / sid / "scenario.json"
+    scenario_path = scenario_root / sid / "scenario.json"
     notice_path = scenario_path.with_name("notice.txt")
     scenario, event, start, end = scenario_event(scenario_path, sid)
     if event.get("type") != "SERVICE_DELAY" or event.get("target_service_id") != "SVC-35a7482f2af1d0" or event.get("semantics") != "DEPARTURE_WINDOW":
@@ -358,15 +400,17 @@ def verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, comm
             "downstream_connections": connection_rows, "fixed_itinerary_continuable": connection_feasible,
             "modeled_final_eta": iso(final_eta) if final_eta is not None else None,
             "delivery_deadline": iso(deadline), "deadline_met": deadline_met,
-            "safe_recovery_decision": "NO_REROUTE_REQUIRED" if connection_feasible and deadline_met else "OPERATOR_REVIEW_OR_REBOOKING_REQUIRED",
+            "safe_recovery_decision": None,
             "leg_evidence": leg_evidence,
         })
 
     impacted = sorted(affected_by_ship)
+    assumption_checks = enforce_sc007_assumptions(impacted, matches, connection_evidence, delay, event["target_service_id"])
     affected_labels = [affected_by_ship[s] for s in impacted]
     label = base_label(sid, scenario_path, notice_path, hashes, policy_path, commit, date, scenario, event)
     label["expected_impact"] = {
         "affected_shipments": affected_labels, "affected_shipment_ids": impacted,
+        "unaffected_shipment_ids": sorted(set(ship_by_id) - set(impacted)),
         "unaffected_shipments_or_cohort_rule": "Every planned leg using the target service was enumerated; a shipment is directly affected when a planned departure lies in the half-open event window. Other shipment IDs among the 1,500 joined records are unaffected by this event.",
         "unaffected_shipment_count": len(ship_by_id) - len(impacted),
     }
@@ -374,6 +418,7 @@ def verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, comm
     for item in connection_evidence:
         recoveries.append({
             "shipment_id": item["shipment_id"], "independent_feasibility": "NOT_APPLICABLE",
+            "expected_recovery_status": item["safe_recovery_decision"],
             "original_itinerary_continuation": "FEASIBLE" if item["fixed_itinerary_continuable"] and item["deadline_met"] else "NOT_FEASIBLE_WITHOUT_REBOOKING",
             "reference_routes": [],
             "expected_safe_agent_behavior": "Retain the original itinerary and report the one-hour delay; do not generate an alternative recovery route.",
@@ -388,6 +433,7 @@ def verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, comm
         "event_interval_utc": {"start": iso(start), "end": iso(end)}, "delay_seconds": seconds(delay),
         "matching_departures": [x[3] for x in matches], "affected_shipment_ids": impacted,
         "propagation_and_deadline_calculations": connection_evidence,
+        "assumption_checks": assumption_checks,
         "evidence": [
             {"evidence_id": "SC-007-EVIDENCE-DEPARTURES", "source_file": "data/builds/research_1500/route_plans.json", "source_record_keys": ["route_plan_id", "shipment_id", "ordered_legs[].service_id", "ordered_legs[].planned_departure"], "enumerated_service_departures": departures},
             {"evidence_id": "SC-007-EVIDENCE-PROPAGATION", "source_file": "data/builds/research_1500/route_plans.json", "source_record_keys": ["ordered_legs[].planned_arrival", "ordered_legs[].planned_departure", "ordered_legs[].min_transfer_hours"], "calculations": connection_evidence},
@@ -398,9 +444,9 @@ def verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, comm
     return label
 
 
-def verify_sc012(dataset, hashes, ports, ship_by_id, plans, policy_path, commit, date):
+def verify_sc012(scenario_root, hashes, ports, ship_by_id, plans, policy_path, commit, date):
     sid = "SC-012"
-    scenario_path = Path("examples/phase5") / sid / "scenario.json"
+    scenario_path = scenario_root / sid / "scenario.json"
     notice_path = scenario_path.with_name("notice.txt")
     scenario, event, start, end = scenario_event(scenario_path, sid)
     expected_ops = {"ARRIVAL", "DEPARTURE", "TRANSSHIPMENT"}
@@ -441,15 +487,39 @@ def verify_sc012(dataset, hashes, ports, ship_by_id, plans, policy_path, commit,
                 if matched:
                     overlap_transfers.append(row)
     impacted = sorted({x["shipment_id"] for x in overlap_arrivals + overlap_departures + overlap_transfers})
+    overlapping_by_ship = {}
+    for operation, rows in (("ARRIVAL", overlap_arrivals), ("DEPARTURE", overlap_departures), ("TRANSSHIPMENT", overlap_transfers)):
+        for row in rows:
+            overlapping_by_ship.setdefault(row["shipment_id"], []).append({"operation": operation, **row})
+    affected_labels = [{
+        "shipment_id": shipment_id, "direct_or_indirect": "DIRECT",
+        "reason_codes": sorted({
+            {"ARRIVAL": "PORT_CLOSURE_ARRIVAL_OVERLAP", "DEPARTURE": "PORT_CLOSURE_DEPARTURE_OVERLAP",
+             "TRANSSHIPMENT": "PORT_CLOSURE_TRANSFER_OCCUPANCY_OVERLAP"}[row["operation"]]
+            for row in overlapping_by_ship[shipment_id]
+        }),
+        "operation_evidence": overlapping_by_ship[shipment_id],
+    } for shipment_id in impacted]
+    if impacted:
+        diagnostic = {
+            "failed_assumption": "SC-012 is no longer a no-impact candidate",
+            "affected_shipment_ids": impacted, "affected_shipments": affected_labels,
+            "overlapping_arrivals": overlap_arrivals, "overlapping_departures": overlap_departures,
+            "overlapping_transfers": overlap_transfers,
+        }
+        raise ScenarioAssumptionError("SC-012 no-impact verification refused: "
+                                      + json.dumps(json_ready(diagnostic), sort_keys=True))
     label = base_label(sid, scenario_path, notice_path, hashes, policy_path, commit, date, scenario, event)
     label["expected_impact"] = {
-        "affected_shipments": [], "affected_shipment_ids": [],
+        "affected_shipments": affected_labels, "affected_shipment_ids": impacted,
+        "unaffected_shipment_ids": sorted(set(ship_by_id) - set(impacted)),
         "unaffected_shipments_or_cohort_rule": "Explicit empty impact set after enumerating all canonical planned arrivals and departures at ARBUE and every consecutive-leg transfer interval at ARBUE across all 1,500 plans.",
         "unaffected_shipment_count": len(ship_by_id),
     }
     label["unaffected_recovery_classification"] = {
         "status": "UNCHANGED", "shipment_count": len(ship_by_id),
         "cohort_rule": "All 1,500 canonical shipment records; no planned operation at ARBUE overlaps the event window.",
+        "expected_recovery_status": "UNCHANGED",
         "recovery_plans_expected": 0,
     }
     label["expected_recovery"] = []
@@ -473,11 +543,7 @@ def verify_sc012(dataset, hashes, ports, ship_by_id, plans, policy_path, commit,
             {"evidence_id": "SC-012-EVIDENCE-RECORD-JOIN", "source_file": "data/builds/research_1500/shipments.json", "source_record_keys": ["shipment_id", "route_plan_id"], "joined_shipments": len(ship_by_id)},
         ],
     }
-    if impacted:
-        label["verification_status"] = "AMBIGUOUS"
-        label["review_notes"] = "Unexpected operation overlap found; investigate before freezing the no-impact label."
-    else:
-        label["review_notes"] = "The empty impact set is supported by the complete modeled operation scan. All shipments remain unchanged; no recovery action or route is warranted."
+    label["review_notes"] = "The empty impact set is supported by the complete modeled operation scan. All shipments remain unchanged; no recovery action or route is warranted."
     return label
 
 
@@ -490,16 +556,17 @@ def git_commit(root: Path) -> str:
 
 def generate(args, root: Path):
     dataset = (root / args.dataset).resolve()
-    policy_path = (root / "config/recovery_policy.json").resolve()
+    policy_path = (root / args.policy).resolve()
+    scenario_root = (root / args.scenario_root).resolve()
     manifest, hashes, ports, services, ship_by_id, plans = source_records(dataset)
     date = args.verification_date or datetime.now(timezone.utc).date().isoformat()
     if len(date) != 10:
         raise ValueError("--verification-date must use YYYY-MM-DD")
     commit = git_commit(root)
     labels = [
-        verify_sc002(dataset, hashes, ports, ship_by_id, plans, policy_path, commit, date),
-        verify_sc007(dataset, hashes, services, ship_by_id, plans, policy_path, commit, date),
-        verify_sc012(dataset, hashes, ports, ship_by_id, plans, policy_path, commit, date),
+        verify_sc002(scenario_root, hashes, ports, ship_by_id, plans, policy_path, commit, date),
+        verify_sc007(scenario_root, hashes, services, ship_by_id, plans, policy_path, commit, date),
+        verify_sc012(scenario_root, hashes, ports, ship_by_id, plans, policy_path, commit, date),
     ]
     output = (root / args.ground_truth).resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -513,55 +580,133 @@ def generate(args, root: Path):
     print(json.dumps({"dataset_hashes_unchanged": True, "canonical_hashes": hashes, "manifest_status": manifest["validation_status"]}, indent=2))
 
 
+def path_ref(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return str(path.resolve())
+
+
+def expected_statuses(label: dict) -> dict[str, str]:
+    impact = label["expected_impact"]
+    affected_ids = set(impact["affected_shipment_ids"])
+    unaffected_ids = set(impact["unaffected_shipment_ids"])
+    if affected_ids & unaffected_ids or len(affected_ids | unaffected_ids) != 1500:
+        raise ValueError(f"{label['scenario_id']} ground-truth cohort does not cover exactly 1,500 unique shipments")
+    rows = label.get("expected_recovery", [])
+    statuses = {}
+    for row in rows:
+        sid = row["shipment_id"]
+        status = row.get("expected_recovery_status")
+        if not status or sid not in affected_ids or sid in statuses:
+            raise ValueError(f"{label['scenario_id']} has missing/invalid expected recovery status for {sid}")
+        statuses[sid] = status
+    if set(statuses) != affected_ids:
+        raise ValueError(f"{label['scenario_id']} expected recovery decisions do not cover its affected set")
+    unchanged_status = label.get("unaffected_recovery_classification", {}).get("expected_recovery_status", "UNCHANGED")
+    if unchanged_status != "UNCHANGED":
+        raise ValueError(f"{label['scenario_id']} unaffected cohort must be independently classified UNCHANGED")
+    statuses.update({sid: unchanged_status for sid in unaffected_ids})
+    return statuses
+
+
 def compare(args, root: Path):
     ground_truth = (root / args.ground_truth).resolve()
     run_root = (root / args.run_outputs).resolve()
+    comparison_root = (root / args.comparisons).resolve()
+    comparison_root.mkdir(parents=True, exist_ok=True)
+    reference_hashes_before = {sid: sha256(ground_truth / f"{sid}.json") for sid in SCENARIOS}
+    mismatches = []
     for sid in SCENARIOS:
         label_path = ground_truth / f"{sid}.json"
+        label_hash = reference_hashes_before[sid]
         label = read_json(label_path)
-        if label.get("scenario_id") != sid or label.get("verification_status") not in {"VERIFIED", "AMBIGUOUS", "UNVERIFIABLE"}:
-            raise ValueError(f"missing/faulty finalized independent label for {sid}")
+        if label.get("scenario_id") != sid or label.get("verification_status") != "VERIFIED":
+            raise ValueError(f"missing or unverified independent reference label for {sid}")
+        expected_status_by_id = expected_statuses(label)
         p3_dir, p4_dir = run_root / sid / "phase3", run_root / sid / "phase4"
-        p3_impacts = read_json(p3_dir / "shipment_impacts.json")
-        p3_summary = read_json(p3_dir / "summary.json")
-        p4_results = read_json(p4_dir / "recovery_results.json")
-        p4_summary = read_json(p4_dir / "summary.json")
-        independent_ids = label["expected_impact"]["affected_shipment_ids"]
+        p3_impact_path, p3_summary_path = p3_dir / "shipment_impacts.json", p3_dir / "summary.json"
+        p4_result_path, p4_summary_path = p4_dir / "recovery_results.json", p4_dir / "summary.json"
+        p3_impacts, p3_summary = read_json(p3_impact_path), read_json(p3_summary_path)
+        p4_results, p4_summary = read_json(p4_result_path), read_json(p4_summary_path)
+
+        independent_ids = sorted(label["expected_impact"]["affected_shipment_ids"])
         observed_p3_ids = sorted({x["shipment_id"] for x in p3_impacts})
+        observed_p4_ids = [x["shipment_id"] for x in p4_results]
+        if len(observed_p4_ids) != len(set(observed_p4_ids)):
+            raise ValueError(f"Phase 4 output contains duplicate shipment rows for {sid}")
+        observed_p4_by_id = {x["shipment_id"]: x for x in p4_results}
         observed_p4_affected = sorted(x["shipment_id"] for x in p4_results if x["recovery_status"] != "UNCHANGED")
-        relevant_p4 = [x for x in p4_results if x["shipment_id"] in independent_ids]
         p3_agrees = independent_ids == observed_p3_ids
         p4_membership_agrees = independent_ids == observed_p4_affected
-        p4_statuses = {x["shipment_id"]: x["recovery_status"] for x in relevant_p4}
+        expected_ids, observed_ids = set(expected_status_by_id), set(observed_p4_by_id)
+        missing_p4_ids, extra_p4_ids = sorted(expected_ids - observed_ids), sorted(observed_ids - expected_ids)
+        status_mismatches = [
+            {"shipment_id": sid2, "expected": expected_status_by_id[sid2], "observed": observed_p4_by_id[sid2]["recovery_status"]}
+            for sid2 in sorted(expected_ids & observed_ids)
+            if expected_status_by_id[sid2] != observed_p4_by_id[sid2]["recovery_status"]
+        ]
+        p4_status_agrees = not (missing_p4_ids or extra_p4_ids or status_mismatches)
+        relevant_p4 = [observed_p4_by_id[x] for x in independent_ids if x in observed_p4_by_id]
+        expected_dist = {}
+        for status in expected_status_by_id.values():
+            expected_dist[status] = expected_dist.get(status, 0) + 1
         observed = {
-            "comparison_status": "COMPARED_AFTER_INDEPENDENT_LABEL_GENERATION",
-            "phase3": {
-                "output_refs": [str((p3_dir / "shipment_impacts.json").relative_to(root)), str((p3_dir / "summary.json").relative_to(root))],
-                "output_sha256": {"shipment_impacts.json": sha256(p3_dir / "shipment_impacts.json"), "summary.json": sha256(p3_dir / "summary.json")},
-                "affected_shipment_ids": observed_p3_ids, "summary": p3_summary,
-                "agrees_with_independent_membership": p3_agrees,
+            "comparison_version": "1.0", "scenario_id": sid,
+            "reference_label": {"path": path_ref(label_path, root), "sha256": label_hash, "verification_status": label["verification_status"]},
+            "independent_expected": {
+                "affected_shipment_ids": independent_ids,
+                "expected_recovery_status_distribution": dict(sorted(expected_dist.items())),
+                "expected_recovery_status_by_affected_shipment": {x["shipment_id"]: x["expected_recovery_status"] for x in label.get("expected_recovery", [])},
             },
-            "phase4": {
-                "output_refs": [str((p4_dir / "recovery_results.json").relative_to(root)), str((p4_dir / "summary.json").relative_to(root))],
-                "output_sha256": {"recovery_results.json": sha256(p4_dir / "recovery_results.json"), "summary.json": sha256(p4_dir / "summary.json")},
-                "non_unchanged_shipment_ids": observed_p4_affected, "status_distribution": p4_summary["statuses"],
-                "affected_shipment_statuses": p4_statuses,
-                "reason_codes": {x["shipment_id"]: x.get("reason_code") for x in relevant_p4},
-                "missing_information": {x["shipment_id"]: x.get("missing_information", []) for x in relevant_p4},
-                "recovery_plan": {x["shipment_id"]: x.get("recovery_plan") for x in relevant_p4},
-                "agrees_with_independent_membership": p4_membership_agrees,
+            "phase3_observed": {
+                "output_refs": [path_ref(p3_impact_path, root), path_ref(p3_summary_path, root)],
+                "output_sha256": {"shipment_impacts.json": sha256(p3_impact_path), "summary.json": sha256(p3_summary_path)},
+                "affected_shipment_ids": observed_p3_ids, "impact_evidence": p3_impacts, "summary": p3_summary,
+                "affected_set_membership_agrees": p3_agrees,
             },
+            "phase4_observed": {
+                "output_refs": [path_ref(p4_result_path, root), path_ref(p4_summary_path, root)],
+                "output_sha256": {"recovery_results.json": sha256(p4_result_path), "summary.json": sha256(p4_summary_path)},
+                "shipment_ids": sorted(observed_p4_ids), "non_unchanged_shipment_ids": observed_p4_affected,
+                "status_distribution": p4_summary["statuses"],
+                "relevant_results": [{
+                    "shipment_id": x["shipment_id"], "recovery_status": x["recovery_status"],
+                    "reason_code": x.get("reason_code"), "reason": x.get("reason"),
+                    "missing_information": x.get("missing_information"), "recovery_plan": x.get("recovery_plan"),
+                } for x in relevant_p4],
+                "affected_set_membership_agrees": p4_membership_agrees,
+                "expected_safe_decision_status_agrees": p4_status_agrees,
+                "status_mismatch_details": {"missing_shipment_ids": missing_p4_ids, "unexpected_shipment_ids": extra_p4_ids, "status_mismatches": status_mismatches},
+            },
+            "comparison_result": "MATCH" if p3_agrees and p4_membership_agrees and p4_status_agrees else "MISMATCH",
         }
-        label["observed_execution"] = observed
-        label_path.write_text(json.dumps(json_ready(label), sort_keys=True, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        print(f"compared {sid}: Phase3-membership={p3_agrees}; Phase4-membership={p4_membership_agrees}; Phase4-statuses={p4_statuses}")
+        out_path = comparison_root / f"{sid}.json"
+        out_path.write_text(json.dumps(json_ready(observed), sort_keys=True, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        if observed["comparison_result"] != "MATCH":
+            mismatches.append(sid)
+        print(f"{sid}: {observed['comparison_result']} Phase3-membership={p3_agrees}; Phase4-membership={p4_membership_agrees}; Phase4-status={p4_status_agrees}")
+
+    reference_hashes_after = {sid: sha256(ground_truth / f"{sid}.json") for sid in SCENARIOS}
+    if reference_hashes_before != reference_hashes_after:
+        raise RuntimeError("compare modified a ground-truth reference file")
+    print(json.dumps({
+        "ground_truth_unchanged": True,
+        "ground_truth_sha256": reference_hashes_after,
+        "comparison_sha256": {sid: sha256(comparison_root / f"{sid}.json") for sid in SCENARIOS},
+        "mismatches": mismatches,
+    }, sort_keys=True, indent=2))
+    return mismatches
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("generate", "compare"), help="generate independent labels or append later tool-output corroboration")
     parser.add_argument("--dataset", default="data/builds/research_1500")
+    parser.add_argument("--policy", default="config/recovery_policy.json")
+    parser.add_argument("--scenario-root", default="examples/phase5")
     parser.add_argument("--ground-truth", default="evaluation/ground_truth")
+    parser.add_argument("--comparisons", default="evaluation/comparisons")
     parser.add_argument("--run-outputs", default="data/simulations/phase5/phase5_2b")
     parser.add_argument("--verification-date", help="fixed date YYYY-MM-DD; defaults to current UTC date")
     args = parser.parse_args()
@@ -569,7 +714,8 @@ def main():
     if args.command == "generate":
         generate(args, root)
     else:
-        compare(args, root)
+        if compare(args, root):
+            raise SystemExit(1)
 
 
 if __name__ == "__main__":
