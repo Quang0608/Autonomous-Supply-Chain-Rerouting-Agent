@@ -1,0 +1,3400 @@
+{
+  "comparison_result": "MATCH",
+  "comparison_version": "1.0",
+  "independent_impact_comparison": {
+    "expected_affected_shipment_ids": [
+      "SHIP-000001",
+      "SHIP-000164",
+      "SHIP-000212",
+      "SHIP-000630",
+      "SHIP-000997",
+      "SHIP-EXP-000098",
+      "SHIP-EXP-000339"
+    ],
+    "observed_phase3_affected_shipment_ids": [
+      "SHIP-000001",
+      "SHIP-000164",
+      "SHIP-000212",
+      "SHIP-000630",
+      "SHIP-000997",
+      "SHIP-EXP-000098",
+      "SHIP-EXP-000339"
+    ],
+    "phase3_evidence_agrees": true,
+    "phase3_leg_and_reason_evidence": [
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-000001"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-000164"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-000212"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-000630"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-000997"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-EXP-000098"
+      },
+      {
+        "direct_leg_ids_agree": true,
+        "expected_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "indirect_leg_ids_agree": true,
+        "observed_reason_codes": [
+          "PORT_CLOSURE_DEPARTURE_OVERLAP"
+        ],
+        "reason_codes_agree": true,
+        "shipment_id": "SHIP-EXP-000339"
+      }
+    ],
+    "phase3_membership_agrees": true
+  },
+  "independent_recovery_comparison": {
+    "affected_membership_agrees": true,
+    "all_eta_and_cost_values_agree": true,
+    "all_observed_routes_independently_feasible": true,
+    "all_selected_reference_route_signatures_agree": true,
+    "expected_status_distribution": {
+      "RECOVERED": 7,
+      "UNCHANGED": 1493
+    },
+    "observed_status_distribution": {
+      "DEADLINE_INFEASIBLE": 0,
+      "NO_FEASIBLE_ROUTE": 0,
+      "NO_REROUTE_REQUIRED": 0,
+      "OPERATOR_INTERVENTION_REQUIRED": 0,
+      "RECOVERED": 7,
+      "SEARCH_LIMIT_REACHED": 0,
+      "UNCHANGED": 1493
+    },
+    "route_sequence_and_quantitative_results": [
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-31T08:45:44.64Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "4555.77",
+        "observed_eta": "2025-10-31T08:45:44.64Z",
+        "observed_full_port_sequence": [
+          "VNSGN",
+          "SGSIN",
+          "NLRTM",
+          "DKAAR"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-2ea64b2fee3ba2",
+          "SVC-35a7482f2af1d0",
+          "SVC-52b237e002da4b"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 2,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-35a7482f2af1d0"
+            },
+            {
+              "actual_destination": "NLRTM",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "NLRTM"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-28T09:42:54.72Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-28T09:42:54.72Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 3
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "2761.89",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "2761.89"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "NLRTM",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-52b237e002da4b"
+            },
+            {
+              "actual_destination": "DKAAR",
+              "actual_origin": "NLRTM",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "NLRTM",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_destination": "DKAAR"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-29T00:00:00Z",
+              "earliest_departure": "2025-10-28T21:42:54.72Z",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 301,
+              "frequency_days": 7,
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-31T08:45:44.64Z",
+              "leg_index": 1,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-31T08:45:44.64Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 1,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 1,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 3
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "891.54",
+              "leg_index": 1,
+              "result": "PASS",
+              "supplied_usd": "891.54"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "DKAAR",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "actual": "DKAAR",
+              "constraint": "DESTINATION",
+              "expected": "DKAAR",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-31T08:45:44.64Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-11-01T00:00:00Z",
+              "eta": "2025-10-31T08:45:44.64Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "902.34",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "902.34",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-2ea64b2fee3ba2"
+            },
+            {
+              "canonical_record_usd": "902.34",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "902.34",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-2ea64b2fee3ba2"
+            },
+            {
+              "canonical_record_usd": "2761.89",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "2761.89",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-35a7482f2af1d0"
+            },
+            {
+              "canonical_record_usd": "891.54",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "891.54",
+              "leg_index": 2,
+              "result": "PASS",
+              "service_id": "SVC-52b237e002da4b"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-31T08:45:44.64Z",
+          "total_cost_usd": "4555.77",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-35a7482f2af1d0",
+            "SGSIN",
+            "NLRTM",
+            "2025-10-08T00:00:00Z",
+            "2025-10-28T09:42:54.72Z"
+          ],
+          [
+            "SVC-52b237e002da4b",
+            "NLRTM",
+            "DKAAR",
+            "2025-10-29T00:00:00Z",
+            "2025-10-31T08:45:44.64Z"
+          ]
+        ],
+        "observed_total_cost_usd": 4555.77,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-35a7482f2af1d0",
+            "SGSIN",
+            "NLRTM",
+            "2025-10-08T00:00:00Z",
+            "2025-10-28T09:42:54.72Z"
+          ],
+          [
+            "SVC-52b237e002da4b",
+            "NLRTM",
+            "DKAAR",
+            "2025-10-29T00:00:00Z",
+            "2025-10-31T08:45:44.64Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "VNSGN",
+          "SGSIN",
+          "NLRTM",
+          "DKAAR"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-2ea64b2fee3ba2",
+          "SVC-35a7482f2af1d0",
+          "SVC-52b237e002da4b"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-000001"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-10T11:15:47.52Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "6061.24",
+        "observed_eta": "2025-10-10T11:15:47.52Z",
+        "observed_full_port_sequence": [
+          "GBBPT",
+          "NLRTM",
+          "SGSIN",
+          "VNSGN"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-2154f66a466da4",
+          "SVC-e3ab1786547e47",
+          "SVC-37336995968ed1"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 1,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-37336995968ed1"
+            },
+            {
+              "actual_destination": "VNSGN",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "VNSGN"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-10T11:15:47.52Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-10T11:15:47.52Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 4
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "1203.12",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "1203.12"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "VNSGN",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "actual": "VNSGN",
+              "constraint": "DESTINATION",
+              "expected": "VNSGN",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-10T11:15:47.52Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-11-03T00:00:00Z",
+              "eta": "2025-10-10T11:15:47.52Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "1175.60",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "1175.60",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-2154f66a466da4"
+            },
+            {
+              "canonical_record_usd": "3682.52",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "3682.52",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-e3ab1786547e47"
+            },
+            {
+              "canonical_record_usd": "1175.60",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1175.60",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-2154f66a466da4"
+            },
+            {
+              "canonical_record_usd": "3682.52",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "3682.52",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-e3ab1786547e47"
+            },
+            {
+              "canonical_record_usd": "1203.12",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1203.12",
+              "leg_index": 2,
+              "result": "PASS",
+              "service_id": "SVC-37336995968ed1"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-10T11:15:47.52Z",
+          "total_cost_usd": "6061.24",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-37336995968ed1",
+            "SGSIN",
+            "VNSGN",
+            "2025-10-08T00:00:00Z",
+            "2025-10-10T11:15:47.52Z"
+          ]
+        ],
+        "observed_total_cost_usd": 6061.24,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-37336995968ed1",
+            "SGSIN",
+            "VNSGN",
+            "2025-10-08T00:00:00Z",
+            "2025-10-10T11:15:47.52Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "GBBPT",
+          "NLRTM",
+          "SGSIN",
+          "VNSGN"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-2154f66a466da4",
+          "SVC-e3ab1786547e47",
+          "SVC-37336995968ed1"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-000164"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-15T19:23:05.28Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "7194.68",
+        "observed_eta": "2025-10-15T19:23:05.28Z",
+        "observed_full_port_sequence": [
+          "ESPNY",
+          "NLRTM",
+          "SGSIN",
+          "JPYOK"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-ce195ab1daaeaf",
+          "SVC-e3ab1786547e47",
+          "SVC-9487ce0240e2d0"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 1,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-9487ce0240e2d0"
+            },
+            {
+              "actual_destination": "JPYOK",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "JPYOK"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-15T19:23:05.28Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-15T19:23:05.28Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 4
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "1941.08",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "1941.08"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "JPYOK",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "actual": "JPYOK",
+              "constraint": "DESTINATION",
+              "expected": "JPYOK",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-15T19:23:05.28Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-10-23T00:00:00Z",
+              "eta": "2025-10-15T19:23:05.28Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "1571.08",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "1571.08",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-ce195ab1daaeaf"
+            },
+            {
+              "canonical_record_usd": "3682.52",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "3682.52",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-e3ab1786547e47"
+            },
+            {
+              "canonical_record_usd": "1571.08",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1571.08",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-ce195ab1daaeaf"
+            },
+            {
+              "canonical_record_usd": "3682.52",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "3682.52",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-e3ab1786547e47"
+            },
+            {
+              "canonical_record_usd": "1941.08",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1941.08",
+              "leg_index": 2,
+              "result": "PASS",
+              "service_id": "SVC-9487ce0240e2d0"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-15T19:23:05.28Z",
+          "total_cost_usd": "7194.68",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-9487ce0240e2d0",
+            "SGSIN",
+            "JPYOK",
+            "2025-10-08T00:00:00Z",
+            "2025-10-15T19:23:05.28Z"
+          ]
+        ],
+        "observed_total_cost_usd": 7194.68,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-9487ce0240e2d0",
+            "SGSIN",
+            "JPYOK",
+            "2025-10-08T00:00:00Z",
+            "2025-10-15T19:23:05.28Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "ESPNY",
+          "NLRTM",
+          "SGSIN",
+          "JPYOK"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-ce195ab1daaeaf",
+          "SVC-e3ab1786547e47",
+          "SVC-9487ce0240e2d0"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-000212"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-31T03:46:22.08Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "4865.07",
+        "observed_eta": "2025-10-31T03:46:22.08Z",
+        "observed_full_port_sequence": [
+          "CNSGH",
+          "SGSIN",
+          "FRLEH",
+          "DEHAM"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-e7414655dd419e",
+          "SVC-5c819508b9dd64",
+          "SVC-6652d23b5ce744"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 2,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-5c819508b9dd64"
+            },
+            {
+              "actual_destination": "FRLEH",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "FRLEH"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-27T22:35:45.6Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-27T22:35:45.6Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 3
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "2713.86",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "2713.86"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "FRLEH",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-6652d23b5ce744"
+            },
+            {
+              "actual_destination": "DEHAM",
+              "actual_origin": "FRLEH",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "FRLEH",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_destination": "DEHAM"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-29T00:00:00Z",
+              "earliest_departure": "2025-10-28T10:35:45.6Z",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 301,
+              "frequency_days": 7,
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-31T03:46:22.08Z",
+              "leg_index": 1,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-31T03:46:22.08Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 1,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 1,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 3
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "869.97",
+              "leg_index": 1,
+              "result": "PASS",
+              "supplied_usd": "869.97"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "DEHAM",
+              "leg_index": 1,
+              "result": "PASS"
+            },
+            {
+              "actual": "DEHAM",
+              "constraint": "DESTINATION",
+              "expected": "DEHAM",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-31T03:46:22.08Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-11-08T00:00:00Z",
+              "eta": "2025-10-31T03:46:22.08Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "1281.24",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "1281.24",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-e7414655dd419e"
+            },
+            {
+              "canonical_record_usd": "1281.24",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1281.24",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-e7414655dd419e"
+            },
+            {
+              "canonical_record_usd": "2713.86",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "2713.86",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-5c819508b9dd64"
+            },
+            {
+              "canonical_record_usd": "869.97",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "869.97",
+              "leg_index": 2,
+              "result": "PASS",
+              "service_id": "SVC-6652d23b5ce744"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-31T03:46:22.08Z",
+          "total_cost_usd": "4865.07",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-5c819508b9dd64",
+            "SGSIN",
+            "FRLEH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-27T22:35:45.6Z"
+          ],
+          [
+            "SVC-6652d23b5ce744",
+            "FRLEH",
+            "DEHAM",
+            "2025-10-29T00:00:00Z",
+            "2025-10-31T03:46:22.08Z"
+          ]
+        ],
+        "observed_total_cost_usd": 4865.07,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-5c819508b9dd64",
+            "SGSIN",
+            "FRLEH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-27T22:35:45.6Z"
+          ],
+          [
+            "SVC-6652d23b5ce744",
+            "FRLEH",
+            "DEHAM",
+            "2025-10-29T00:00:00Z",
+            "2025-10-31T03:46:22.08Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "CNSGH",
+          "SGSIN",
+          "FRLEH",
+          "DEHAM"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-e7414655dd419e",
+          "SVC-5c819508b9dd64",
+          "SVC-6652d23b5ce744"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-000630"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-27T22:35:45.6Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "2715.12",
+        "observed_eta": "2025-10-27T22:35:45.6Z",
+        "observed_full_port_sequence": [
+          "KRPUS",
+          "SGSIN",
+          "FRLEH"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-f9a6678acbf541",
+          "SVC-5c819508b9dd64"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 1,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-5c819508b9dd64"
+            },
+            {
+              "actual_destination": "FRLEH",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "FRLEH"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-27T22:35:45.6Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-27T22:35:45.6Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 2
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "1809.24",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "1809.24"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "FRLEH",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "actual": "FRLEH",
+              "constraint": "DESTINATION",
+              "expected": "FRLEH",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-27T22:35:45.6Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-11-20T00:00:00Z",
+              "eta": "2025-10-27T22:35:45.6Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "905.88",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "905.88",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-f9a6678acbf541"
+            },
+            {
+              "canonical_record_usd": "905.88",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "905.88",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-f9a6678acbf541"
+            },
+            {
+              "canonical_record_usd": "1809.24",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1809.24",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-5c819508b9dd64"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-27T22:35:45.6Z",
+          "total_cost_usd": "2715.12",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-5c819508b9dd64",
+            "SGSIN",
+            "FRLEH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-27T22:35:45.6Z"
+          ]
+        ],
+        "observed_total_cost_usd": 2715.12,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-5c819508b9dd64",
+            "SGSIN",
+            "FRLEH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-27T22:35:45.6Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "KRPUS",
+          "SGSIN",
+          "FRLEH"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-f9a6678acbf541",
+          "SVC-5c819508b9dd64"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-000997"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-10T20:35:22.56Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "3010.90",
+        "observed_eta": "2025-10-10T20:35:22.56Z",
+        "observed_full_port_sequence": [
+          "USHOU",
+          "SGSIN",
+          "THLCH"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-EXP-22b2451cab3745",
+          "SVC-da4bc9ff69bcf4"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 1,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-da4bc9ff69bcf4"
+            },
+            {
+              "actual_destination": "THLCH",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "THLCH"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-10T20:35:22.56Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-10T20:35:22.56Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 2
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "628.42",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "628.42"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "THLCH",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "actual": "THLCH",
+              "constraint": "DESTINATION",
+              "expected": "THLCH",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-10T20:35:22.56Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-10-11T00:00:00Z",
+              "eta": "2025-10-10T20:35:22.56Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "2382.48",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "2382.48",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-EXP-22b2451cab3745"
+            },
+            {
+              "canonical_record_usd": "2382.48",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "2382.48",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-EXP-22b2451cab3745"
+            },
+            {
+              "canonical_record_usd": "628.42",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "628.42",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-da4bc9ff69bcf4"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-10T20:35:22.56Z",
+          "total_cost_usd": "3010.90",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-da4bc9ff69bcf4",
+            "SGSIN",
+            "THLCH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-10T20:35:22.56Z"
+          ]
+        ],
+        "observed_total_cost_usd": 3010.9,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-da4bc9ff69bcf4",
+            "SGSIN",
+            "THLCH",
+            "2025-10-08T00:00:00Z",
+            "2025-10-10T20:35:22.56Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "USHOU",
+          "SGSIN",
+          "THLCH"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-EXP-22b2451cab3745",
+          "SVC-da4bc9ff69bcf4"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-EXP-000098"
+      },
+      {
+        "cost_agrees_within_one_cent": true,
+        "deadline_met_independently": true,
+        "eta_agrees": true,
+        "expected_eta": "2025-10-14T17:39:41.76Z",
+        "expected_recovery_classification": "SAME_SERVICE_RESCHEDULING",
+        "expected_total_cost_usd": "2187.38",
+        "observed_eta": "2025-10-14T17:39:41.76Z",
+        "observed_full_port_sequence": [
+          "ZADUR",
+          "SGSIN",
+          "CNQIN"
+        ],
+        "observed_full_service_sequence": [
+          "SVC-3df59952b4298f",
+          "SVC-EXP-0a46814e21d98e"
+        ],
+        "observed_phase4_status": "RECOVERED",
+        "observed_route_independent_checks": {
+          "checks": [
+            {
+              "actual": 1,
+              "constraint": "MAX_HOPS",
+              "maximum": 4,
+              "result": "PASS"
+            },
+            {
+              "constraint": "SERVICE_EXISTS",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-EXP-0a46814e21d98e"
+            },
+            {
+              "actual_destination": "CNQIN",
+              "actual_origin": "SGSIN",
+              "constraint": "DIRECTED_CONTINUITY",
+              "expected_origin": "SGSIN",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_destination": "CNQIN"
+            },
+            {
+              "constraint": "TRANSFER_READY",
+              "departure": "2025-10-08T00:00:00Z",
+              "earliest_departure": "2025-10-01T00:00:00Z",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "MODELED_DEPARTURE",
+              "departure_day_offset": 280,
+              "frequency_days": 7,
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "applied_delay_hours": 0,
+              "constraint": "TRANSIT_DURATION",
+              "expected_arrival": "2025-10-14T17:39:41.76Z",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_arrival": "2025-10-14T17:39:41.76Z"
+            },
+            {
+              "blocking_event_ids": [],
+              "constraint": "ACTIVE_DISRUPTIONS",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "constraint": "CARGO_CLASS",
+              "leg_index": 0,
+              "result": "PASS",
+              "shipment_class": "GENERAL_CONTAINER",
+              "supported_classes": [
+                "GENERAL_CONTAINER"
+              ]
+            },
+            {
+              "constraint": "INDIVIDUAL_CAPACITY",
+              "leg_index": 0,
+              "limitation": "Individual modeled capacity only; no shared booking availability inferred.",
+              "result": "PASS",
+              "service_capacity_teu": 5000,
+              "shipment_teu": 2
+            },
+            {
+              "constraint": "MODELED_COST",
+              "independently_calculated_usd": "896.46",
+              "leg_index": 0,
+              "result": "PASS",
+              "supplied_usd": "896.46"
+            },
+            {
+              "constraint": "NO_CYCLE",
+              "destination": "CNQIN",
+              "leg_index": 0,
+              "result": "PASS"
+            },
+            {
+              "actual": "CNQIN",
+              "constraint": "DESTINATION",
+              "expected": "CNQIN",
+              "result": "PASS"
+            },
+            {
+              "constraint": "POLICY_HORIZON",
+              "eta": "2025-10-14T17:39:41.76Z",
+              "latest": "2026-03-30T00:00:00Z",
+              "result": "PASS"
+            },
+            {
+              "constraint": "HARD_DEADLINE",
+              "deadline": "2025-10-22T00:00:00Z",
+              "eta": "2025-10-14T17:39:41.76Z",
+              "result": "PASS"
+            },
+            {
+              "canonical_record_usd": "1290.92",
+              "constraint": "PRESERVED_PREFIX_COST",
+              "independently_calculated_usd": "1290.92",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-3df59952b4298f"
+            },
+            {
+              "canonical_record_usd": "1290.92",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "1290.92",
+              "leg_index": 0,
+              "result": "PASS",
+              "service_id": "SVC-3df59952b4298f"
+            },
+            {
+              "canonical_record_usd": "896.46",
+              "constraint": "ORIGINAL_PLAN_LEG_COST",
+              "independently_calculated_usd": "896.46",
+              "leg_index": 1,
+              "result": "PASS",
+              "service_id": "SVC-EXP-0a46814e21d98e"
+            }
+          ],
+          "deadline_met": true,
+          "eta": "2025-10-14T17:39:41.76Z",
+          "total_cost_usd": "2187.38",
+          "valid": true
+        },
+        "observed_route_independently_feasible": true,
+        "observed_suffix_signature": [
+          [
+            "SVC-EXP-0a46814e21d98e",
+            "SGSIN",
+            "CNQIN",
+            "2025-10-08T00:00:00Z",
+            "2025-10-14T17:39:41.76Z"
+          ]
+        ],
+        "observed_total_cost_usd": 2187.38,
+        "port_sequence_agrees": true,
+        "reference_suffix_signature": [
+          [
+            "SVC-EXP-0a46814e21d98e",
+            "SGSIN",
+            "CNQIN",
+            "2025-10-08T00:00:00Z",
+            "2025-10-14T17:39:41.76Z"
+          ]
+        ],
+        "replacement_suffix_exactly_matches_reference": true,
+        "selected_reference_port_sequence": [
+          "ZADUR",
+          "SGSIN",
+          "CNQIN"
+        ],
+        "selected_reference_service_sequence": [
+          "SVC-3df59952b4298f",
+          "SVC-EXP-0a46814e21d98e"
+        ],
+        "service_sequence_agrees": true,
+        "shipment_id": "SHIP-EXP-000339"
+      }
+    ],
+    "status_agreement": true,
+    "status_mismatches": []
+  },
+  "limitations": [
+    "Phase 4 statuses and validator records are observed corroboration, not independent labels.",
+    "The independent search is limited by the declared recovery policy bounds; no global optimality is claimed.",
+    "Individual capacity is modeled per shipment and does not establish shared real-world booking availability."
+  ],
+  "observed_output_hashes": {
+    "data/simulations/phase5/phase5_2d/SC-001/phase3/shipment_impacts.json": "04183480c4cb01d3918290eff763d1c1f4499178c1ed51587c0f62ff64c7f575",
+    "data/simulations/phase5/phase5_2d/SC-001/phase3/summary.json": "41bed69cd4ba8fb0f13eda13b1b05a1ae7a2d99df1ea042a8ecebec71c64e612",
+    "data/simulations/phase5/phase5_2d/SC-001/phase4/constraint_validation.json": "e99febafb9f4454bbd85243a3460bc66d09390322473df5d966bbc54e16d47df",
+    "data/simulations/phase5/phase5_2d/SC-001/phase4/recovery_results.json": "359f57ac67b44604eb64fd327840b608d2f9fff0be96a92c5952b74ff451dec2",
+    "data/simulations/phase5/phase5_2d/SC-001/phase4/summary.json": "c495a465fcc10305b526611daade60509e55fef860b57ea25c4234e6e9128332"
+  },
+  "observed_phase3": {
+    "summary": {
+      "affected_shipments": 7,
+      "blocked_count": 7,
+      "directly_affected": 7,
+      "disrupted_legs": 7,
+      "earliest_affected_operation": "2025-10-01T00:00:00Z",
+      "event_types": [
+        "PORT_CLOSURE"
+      ],
+      "indirectly_affected": 0,
+      "latest_affected_operation": "2025-10-01T00:00:00Z",
+      "no_recovery_statuses": {
+        "BLOCKED": 7,
+        "DEADLINE_MISSED": 0,
+        "DELAYED": 0,
+        "OUTCOME_UNDETERMINED": 0,
+        "UNAFFECTED": 1493,
+        "UNRESOLVED_CONNECTION": 0
+      },
+      "scenario_id": "SC-001",
+      "status_percentages": {
+        "BLOCKED": 0.4667,
+        "DEADLINE_MISSED": 0,
+        "DELAYED": 0,
+        "OUTCOME_UNDETERMINED": 0,
+        "UNAFFECTED": 99.5333,
+        "UNRESOLVED_CONNECTION": 0
+      },
+      "total_shipments": 1500,
+      "unaffected": 1493,
+      "unresolved_count": 0
+    }
+  },
+  "observed_phase4": {
+    "constraint_validation_observed": [
+      {
+        "candidate_service_ids": [
+          "SVC-35a7482f2af1d0",
+          "SVC-52b237e002da4b"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-35a7482f2af1d0"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 1,
+            "result": "PASS",
+            "service_id": "SVC-52b237e002da4b"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000001"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-5c819508b9dd64",
+          "SVC-6652d23b5ce744",
+          "SVC-ebd769ebf84e07"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-5c819508b9dd64"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 1,
+            "result": "PASS",
+            "service_id": "SVC-6652d23b5ce744"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 2,
+            "result": "PASS",
+            "service_id": "SVC-ebd769ebf84e07"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 2,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "FAIL"
+          }
+        ],
+        "shipment_id": "SHIP-000001"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-37336995968ed1"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-37336995968ed1"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000164"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-9487ce0240e2d0"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-9487ce0240e2d0"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000212"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-5c819508b9dd64",
+          "SVC-6652d23b5ce744"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-5c819508b9dd64"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 1,
+            "result": "PASS",
+            "service_id": "SVC-6652d23b5ce744"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000630"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-35a7482f2af1d0",
+          "SVC-534311f36a1cb7"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-35a7482f2af1d0"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 1,
+            "result": "PASS",
+            "service_id": "SVC-534311f36a1cb7"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 1,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000630"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-5c819508b9dd64"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-5c819508b9dd64"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-000997"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-da4bc9ff69bcf4"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-da4bc9ff69bcf4"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-EXP-000098"
+      },
+      {
+        "candidate_service_ids": [
+          "SVC-EXP-0a46814e21d98e"
+        ],
+        "checks": [
+          {
+            "constraint": "PREFIX_IMMUTABLE",
+            "result": "PASS"
+          },
+          {
+            "constraint": "MAX_HOPS",
+            "result": "PASS"
+          },
+          {
+            "constraint": "SERVICE_EXISTS",
+            "leg": 0,
+            "result": "PASS",
+            "service_id": "SVC-EXP-0a46814e21d98e"
+          },
+          {
+            "constraint": "DIRECTED_CONTINUITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CHRONOLOGY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_DEPARTURE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "TRANSIT_DURATION",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "blocking_event_ids": [],
+            "constraint": "ACTIVE_EVENTS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "CARGO_CLASS",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "INDIVIDUAL_CAPACITY",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "MODELED_COST",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "NO_CYCLE",
+            "leg": 0,
+            "result": "PASS"
+          },
+          {
+            "constraint": "DESTINATION",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HORIZON",
+            "result": "PASS"
+          },
+          {
+            "constraint": "HARD_DEADLINE",
+            "result": "PASS"
+          }
+        ],
+        "shipment_id": "SHIP-EXP-000339"
+      }
+    ],
+    "relevant_results": [
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "actual_arrival_time": "2025-09-26T11:15:47.52Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-000001:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 902.34,
+            "origin_port_id": "VNSGN",
+            "planned_arrival": 268.4693,
+            "planned_departure": 266,
+            "sequence": 1,
+            "service_id": "SVC-2ea64b2fee3ba2"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-28T09:42:54.72Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "NLRTM",
+            "modeled_cost_usd": 2761.89,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-35a7482f2af1d0"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-31T08:45:44.64Z",
+            "departure_time": "2025-10-29T00:00:00Z",
+            "destination_port_id": "DKAAR",
+            "modeled_cost_usd": 891.54,
+            "origin_port_id": "NLRTM",
+            "service_id": "SVC-52b237e002da4b"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 4555.77,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-31T08:45:44.64Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-000001:L1"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "actual_arrival_time": "2025-09-26T11:15:47.52Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-000001:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 902.34,
+              "origin_port_id": "VNSGN",
+              "planned_arrival": 268.4693,
+              "planned_departure": 266,
+              "sequence": 1,
+              "service_id": "SVC-2ea64b2fee3ba2"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-000001",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "NLRTM",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 2761.89,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 293.4048,
+              "planned_departure": 273,
+              "sequence": 2,
+              "service_id": "SVC-35a7482f2af1d0"
+            },
+            {
+              "destination_port_id": "DKAAR",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 891.54,
+              "origin_port_id": "NLRTM",
+              "planned_arrival": 296.3651,
+              "planned_departure": 294,
+              "sequence": 3,
+              "service_id": "SVC-52b237e002da4b"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-28T09:42:54.72Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "NLRTM",
+            "modeled_cost_usd": 2761.89,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-35a7482f2af1d0"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-31T08:45:44.64Z",
+            "departure_time": "2025-10-29T00:00:00Z",
+            "destination_port_id": "DKAAR",
+            "modeled_cost_usd": 891.54,
+            "origin_port_id": "NLRTM",
+            "service_id": "SVC-52b237e002da4b"
+          }
+        ],
+        "shipment_id": "SHIP-000001"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000164:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 1175.6,
+            "origin_port_id": "GBBPT",
+            "planned_arrival": 247.2701,
+            "planned_departure": 245,
+            "sequence": 1,
+            "service_id": "SVC-2154f66a466da4"
+          },
+          {
+            "actual_arrival_time": "2025-09-30T09:42:54.72Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-000164:L2",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 3682.52,
+            "origin_port_id": "NLRTM",
+            "planned_arrival": 272.4048,
+            "planned_departure": 252,
+            "sequence": 2,
+            "service_id": "SVC-e3ab1786547e47"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-10T11:15:47.52Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "VNSGN",
+            "modeled_cost_usd": 1203.12,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-37336995968ed1"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 6061.24,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-10T11:15:47.52Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-000164:L1",
+            "PLAN-SHIP-000164:L2"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "destination_port_id": "NLRTM",
+              "leg_id": "PLAN-SHIP-000164:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1175.6,
+              "origin_port_id": "GBBPT",
+              "planned_arrival": 247.2701,
+              "planned_departure": 245,
+              "sequence": 1,
+              "service_id": "SVC-2154f66a466da4"
+            },
+            {
+              "actual_arrival_time": "2025-09-30T09:42:54.72Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-000164:L2",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 3682.52,
+              "origin_port_id": "NLRTM",
+              "planned_arrival": 272.4048,
+              "planned_departure": 252,
+              "sequence": 2,
+              "service_id": "SVC-e3ab1786547e47"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-000164",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "VNSGN",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1203.12,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 275.4693,
+              "planned_departure": 273,
+              "sequence": 3,
+              "service_id": "SVC-37336995968ed1"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-10T11:15:47.52Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "VNSGN",
+            "modeled_cost_usd": 1203.12,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-37336995968ed1"
+          }
+        ],
+        "shipment_id": "SHIP-000164"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000212:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 1571.08,
+            "origin_port_id": "ESPNY",
+            "planned_arrival": 250.1311,
+            "planned_departure": 245,
+            "sequence": 1,
+            "service_id": "SVC-ce195ab1daaeaf"
+          },
+          {
+            "actual_arrival_time": "2025-09-30T09:42:54.72Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-000212:L2",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 3682.52,
+            "origin_port_id": "NLRTM",
+            "planned_arrival": 272.4048,
+            "planned_departure": 252,
+            "sequence": 2,
+            "service_id": "SVC-e3ab1786547e47"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-15T19:23:05.28Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "JPYOK",
+            "modeled_cost_usd": 1941.08,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-9487ce0240e2d0"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 7194.68,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-15T19:23:05.28Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-000212:L1",
+            "PLAN-SHIP-000212:L2"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "destination_port_id": "NLRTM",
+              "leg_id": "PLAN-SHIP-000212:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1571.08,
+              "origin_port_id": "ESPNY",
+              "planned_arrival": 250.1311,
+              "planned_departure": 245,
+              "sequence": 1,
+              "service_id": "SVC-ce195ab1daaeaf"
+            },
+            {
+              "actual_arrival_time": "2025-09-30T09:42:54.72Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-000212:L2",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 3682.52,
+              "origin_port_id": "NLRTM",
+              "planned_arrival": 272.4048,
+              "planned_departure": 252,
+              "sequence": 2,
+              "service_id": "SVC-e3ab1786547e47"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-000212",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "JPYOK",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1941.08,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 280.8077,
+              "planned_departure": 273,
+              "sequence": 3,
+              "service_id": "SVC-9487ce0240e2d0"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-15T19:23:05.28Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "JPYOK",
+            "modeled_cost_usd": 1941.08,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-9487ce0240e2d0"
+          }
+        ],
+        "shipment_id": "SHIP-000212"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "actual_arrival_time": "2025-09-30T02:58:24.96Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-000630:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 1281.24,
+            "origin_port_id": "CNSGH",
+            "planned_arrival": 272.1239,
+            "planned_departure": 266,
+            "sequence": 1,
+            "service_id": "SVC-e7414655dd419e"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-27T22:35:45.6Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "FRLEH",
+            "modeled_cost_usd": 2713.86,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-5c819508b9dd64"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-31T03:46:22.08Z",
+            "departure_time": "2025-10-29T00:00:00Z",
+            "destination_port_id": "DEHAM",
+            "modeled_cost_usd": 869.97,
+            "origin_port_id": "FRLEH",
+            "service_id": "SVC-6652d23b5ce744"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 4865.07,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-31T03:46:22.08Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-000630:L1"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "actual_arrival_time": "2025-09-30T02:58:24.96Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-000630:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1281.24,
+              "origin_port_id": "CNSGH",
+              "planned_arrival": 272.1239,
+              "planned_departure": 266,
+              "sequence": 1,
+              "service_id": "SVC-e7414655dd419e"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-000630",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "FRLEH",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 2713.86,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 292.9415,
+              "planned_departure": 273,
+              "sequence": 2,
+              "service_id": "SVC-5c819508b9dd64"
+            },
+            {
+              "destination_port_id": "DEHAM",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 869.97,
+              "origin_port_id": "FRLEH",
+              "planned_arrival": 296.1572,
+              "planned_departure": 294,
+              "sequence": 3,
+              "service_id": "SVC-6652d23b5ce744"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-27T22:35:45.6Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "FRLEH",
+            "modeled_cost_usd": 2713.86,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-5c819508b9dd64"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-31T03:46:22.08Z",
+            "departure_time": "2025-10-29T00:00:00Z",
+            "destination_port_id": "DEHAM",
+            "modeled_cost_usd": 869.97,
+            "origin_port_id": "FRLEH",
+            "service_id": "SVC-6652d23b5ce744"
+          }
+        ],
+        "shipment_id": "SHIP-000630"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "actual_arrival_time": "2025-09-23T20:55:49.44Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-000997:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 905.88,
+            "origin_port_id": "KRPUS",
+            "planned_arrival": 265.8721,
+            "planned_departure": 259,
+            "sequence": 1,
+            "service_id": "SVC-f9a6678acbf541"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-27T22:35:45.6Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "FRLEH",
+            "modeled_cost_usd": 1809.24,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-5c819508b9dd64"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 2715.12,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-27T22:35:45.6Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-000997:L1"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "actual_arrival_time": "2025-09-23T20:55:49.44Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-000997:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 905.88,
+              "origin_port_id": "KRPUS",
+              "planned_arrival": 265.8721,
+              "planned_departure": 259,
+              "sequence": 1,
+              "service_id": "SVC-f9a6678acbf541"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-000997",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "FRLEH",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1809.24,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 292.9415,
+              "planned_departure": 273,
+              "sequence": 2,
+              "service_id": "SVC-5c819508b9dd64"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-27T22:35:45.6Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "FRLEH",
+            "modeled_cost_usd": 1809.24,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-5c819508b9dd64"
+          }
+        ],
+        "shipment_id": "SHIP-000997"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "actual_arrival_time": "2025-09-24T05:38:15.36Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-EXP-000098:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 2382.48,
+            "origin_port_id": "USHOU",
+            "planned_arrival": 266.2349,
+            "planned_departure": 238,
+            "sequence": 1,
+            "service_id": "SVC-EXP-22b2451cab3745"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-10T20:35:22.56Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "THLCH",
+            "modeled_cost_usd": 628.42,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-da4bc9ff69bcf4"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 3010.9,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-10T20:35:22.56Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-EXP-000098:L1"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "actual_arrival_time": "2025-09-24T05:38:15.36Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-EXP-000098:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 2382.48,
+              "origin_port_id": "USHOU",
+              "planned_arrival": 266.2349,
+              "planned_departure": 238,
+              "sequence": 1,
+              "service_id": "SVC-EXP-22b2451cab3745"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-EXP-000098",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "THLCH",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 628.42,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 275.8579,
+              "planned_departure": 273,
+              "sequence": 2,
+              "service_id": "SVC-da4bc9ff69bcf4"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-10T20:35:22.56Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "THLCH",
+            "modeled_cost_usd": 628.42,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-da4bc9ff69bcf4"
+          }
+        ],
+        "shipment_id": "SHIP-EXP-000098"
+      },
+      {
+        "additional_cost_usd": 0,
+        "full_revised_itinerary": [
+          {
+            "actual_arrival_time": "2025-09-29T10:37:37.92Z",
+            "destination_port_id": "SGSIN",
+            "leg_id": "PLAN-SHIP-EXP-000339:L1",
+            "min_transfer_hours": 12,
+            "modeled_cost_usd": 1290.92,
+            "origin_port_id": "ZADUR",
+            "planned_arrival": 271.4428,
+            "planned_departure": 259,
+            "sequence": 1,
+            "service_id": "SVC-3df59952b4298f"
+          },
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-14T17:39:41.76Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "CNQIN",
+            "modeled_cost_usd": 896.46,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-EXP-0a46814e21d98e"
+          }
+        ],
+        "missing_information": null,
+        "modeled_total_cost_usd": 2187.38,
+        "reason": null,
+        "reason_code": "VALIDATED_ALTERNATE",
+        "recovered_eta": "2025-10-14T17:39:41.76Z",
+        "recovery_plan": null,
+        "recovery_state": {
+          "completed_leg_ids": [
+            "PLAN-SHIP-EXP-000339:L1"
+          ],
+          "earliest_recovery_time": "2025-10-01T00:00:00Z",
+          "executed_prefix": [
+            {
+              "actual_arrival_time": "2025-09-29T10:37:37.92Z",
+              "destination_port_id": "SGSIN",
+              "leg_id": "PLAN-SHIP-EXP-000339:L1",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 1290.92,
+              "origin_port_id": "ZADUR",
+              "planned_arrival": 271.4428,
+              "planned_departure": 259,
+              "sequence": 1,
+              "service_id": "SVC-3df59952b4298f"
+            }
+          ],
+          "first_disruption_event_ids": [
+            "SC-001-E1"
+          ],
+          "position_confidence": "MODELED_PORT_STATE",
+          "recovery_port_id": "SGSIN",
+          "shipment_id": "SHIP-EXP-000339",
+          "state_reason": "BLOCKED_FIXED_DEPARTURE",
+          "unexecuted_original_suffix": [
+            {
+              "destination_port_id": "CNQIN",
+              "min_transfer_hours": 12,
+              "modeled_cost_usd": 896.46,
+              "origin_port_id": "SGSIN",
+              "planned_arrival": 279.7359,
+              "planned_departure": 273,
+              "sequence": 2,
+              "service_id": "SVC-EXP-0a46814e21d98e"
+            }
+          ]
+        },
+        "recovery_status": "RECOVERED",
+        "replacement_suffix": [
+          {
+            "applied_delay_event_ids": [],
+            "arrival_time": "2025-10-14T17:39:41.76Z",
+            "departure_time": "2025-10-08T00:00:00Z",
+            "destination_port_id": "CNQIN",
+            "modeled_cost_usd": 896.46,
+            "origin_port_id": "SGSIN",
+            "service_id": "SVC-EXP-0a46814e21d98e"
+          }
+        ],
+        "shipment_id": "SHIP-EXP-000339"
+      }
+    ],
+    "summary": {
+      "affected_shipments": 7,
+      "attempted": 7,
+      "independent_validation_fail": 1,
+      "independent_validation_pass": 8,
+      "no_recovery_statuses": {
+        "BLOCKED": 7,
+        "UNAFFECTED": 1493
+      },
+      "scenario_id": "SC-001",
+      "schema_version": "1.1",
+      "search_diagnostics": {
+        "attempted": 7,
+        "candidates": 9,
+        "expansions": 261
+      },
+      "statuses": {
+        "DEADLINE_INFEASIBLE": 0,
+        "NO_FEASIBLE_ROUTE": 0,
+        "NO_REROUTE_REQUIRED": 0,
+        "OPERATOR_INTERVENTION_REQUIRED": 0,
+        "RECOVERED": 7,
+        "SEARCH_LIMIT_REACHED": 0,
+        "UNCHANGED": 1493
+      },
+      "total_shipments": 1500
+    }
+  },
+  "reference_label": {
+    "path": "evaluation/ground_truth/SC-001.json",
+    "sha256": "daacf7d5ceb71001eb2add04d869c70abd0e204b59269a7d2d82f0c21d160ca7",
+    "verification_status": "VERIFIED"
+  },
+  "scenario_id": "SC-001"
+}
