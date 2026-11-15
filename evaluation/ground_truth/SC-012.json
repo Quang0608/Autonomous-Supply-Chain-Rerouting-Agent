@@ -1,0 +1,345 @@
+{
+  "agent_notice_ref": {
+    "path": "examples/phase5/SC-012/notice.txt",
+    "sha256": "8d3c6a71864cda47f031094b2027c0c09daf8ca0c07587be0ab69c57ba0a27b9"
+  },
+  "evidence_refs": [
+    "SC-012-EVIDENCE-ARRIVALS",
+    "SC-012-EVIDENCE-DEPARTURES",
+    "SC-012-EVIDENCE-TRANSFERS",
+    "SC-012-EVIDENCE-RECORD-JOIN"
+  ],
+  "expected_impact": {
+    "affected_shipment_ids": [],
+    "affected_shipments": [],
+    "unaffected_shipment_count": 1500,
+    "unaffected_shipments_or_cohort_rule": "Explicit empty impact set after enumerating all canonical planned arrivals and departures at ARBUE and every consecutive-leg transfer interval at ARBUE across all 1,500 plans."
+  },
+  "expected_missing_information": [],
+  "expected_recovery": [],
+  "hidden_reference_event": {
+    "events": [
+      {
+        "end_time": "2025-01-02T00:00:00Z",
+        "event_id": "SC-012-E1",
+        "operations": [
+          "ARRIVAL",
+          "DEPARTURE",
+          "TRANSSHIPMENT"
+        ],
+        "start_time": "2025-01-01T00:00:00Z",
+        "target_port_id": "ARBUE",
+        "type": "PORT_CLOSURE"
+      }
+    ],
+    "required_clarification": [],
+    "unresolved_fields": [],
+    "valid_event_expected": true
+  },
+  "independent_calculation": {
+    "affected_shipment_ids": [],
+    "event_interval_utc": {
+      "end": "2025-01-02T00:00:00Z",
+      "start": "2025-01-01T00:00:00Z"
+    },
+    "evidence": [
+      {
+        "enumerated_operations": [
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000177:L1",
+            "operation": "ARRIVAL",
+            "origin_port_id": "BRSSZ",
+            "plan_id": "PLAN-SHIP-000177",
+            "planned_time": "2025-07-05T10:17:28.32Z",
+            "service_id": "SVC-890c970ede41e2",
+            "shipment_id": "SHIP-000177",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000178:L1",
+            "operation": "ARRIVAL",
+            "origin_port_id": "BRSSZ",
+            "plan_id": "PLAN-SHIP-000178",
+            "planned_time": "2025-11-22T10:17:28.32Z",
+            "service_id": "SVC-890c970ede41e2",
+            "shipment_id": "SHIP-000178",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000305:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000305",
+            "planned_time": "2025-07-31T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000305",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000306:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000306",
+            "planned_time": "2025-09-04T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000306",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000479:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000479",
+            "planned_time": "2025-12-11T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000479",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000480:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000480",
+            "planned_time": "2025-10-23T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000480",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000695:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000695",
+            "planned_time": "2025-04-10T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000695",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "ARBUE",
+            "leg_id": "PLAN-SHIP-000696:L2",
+            "operation": "ARRIVAL",
+            "origin_port_id": "NLRTM",
+            "plan_id": "PLAN-SHIP-000696",
+            "planned_time": "2025-03-13T18:58:10.56Z",
+            "service_id": "SVC-7277a10ff2d974",
+            "shipment_id": "SHIP-000696",
+            "within_event_window": false
+          }
+        ],
+        "evidence_id": "SC-012-EVIDENCE-ARRIVALS",
+        "source_file": "data/builds/research_1500/route_plans.json",
+        "source_record_keys": [
+          "ordered_legs[].destination_port_id",
+          "ordered_legs[].planned_arrival"
+        ]
+      },
+      {
+        "enumerated_operations": [
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000033:L1",
+            "operation": "DEPARTURE",
+            "origin_port_id": "ARBUE",
+            "plan_id": "PLAN-SHIP-000033",
+            "planned_time": "2025-06-04T00:00:00Z",
+            "service_id": "SVC-9490c39f6703b0",
+            "shipment_id": "SHIP-000033",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000034:L1",
+            "operation": "DEPARTURE",
+            "origin_port_id": "ARBUE",
+            "plan_id": "PLAN-SHIP-000034",
+            "planned_time": "2025-09-24T00:00:00Z",
+            "service_id": "SVC-9490c39f6703b0",
+            "shipment_id": "SHIP-000034",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000511:L1",
+            "operation": "DEPARTURE",
+            "origin_port_id": "ARBUE",
+            "plan_id": "PLAN-SHIP-000511",
+            "planned_time": "2025-08-20T00:00:00Z",
+            "service_id": "SVC-9490c39f6703b0",
+            "shipment_id": "SHIP-000511",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000512:L1",
+            "operation": "DEPARTURE",
+            "origin_port_id": "ARBUE",
+            "plan_id": "PLAN-SHIP-000512",
+            "planned_time": "2025-12-10T00:00:00Z",
+            "service_id": "SVC-9490c39f6703b0",
+            "shipment_id": "SHIP-000512",
+            "within_event_window": false
+          }
+        ],
+        "evidence_id": "SC-012-EVIDENCE-DEPARTURES",
+        "source_file": "data/builds/research_1500/route_plans.json",
+        "source_record_keys": [
+          "ordered_legs[].origin_port_id",
+          "ordered_legs[].planned_departure"
+        ]
+      },
+      {
+        "enumerated_intervals": [],
+        "evidence_id": "SC-012-EVIDENCE-TRANSFERS",
+        "method": "Pair consecutive legs where inbound destination and outbound origin both equal ARBUE; test [arrival, next_departure) for strict interval overlap with the closure.",
+        "source_file": "data/builds/research_1500/route_plans.json",
+        "source_record_keys": [
+          "ordered_legs[].destination_port_id",
+          "ordered_legs[].planned_arrival",
+          "ordered_legs[].min_transfer_hours",
+          "ordered_legs[].planned_departure"
+        ]
+      },
+      {
+        "evidence_id": "SC-012-EVIDENCE-RECORD-JOIN",
+        "joined_shipments": 1500,
+        "source_file": "data/builds/research_1500/shipments.json",
+        "source_record_keys": [
+          "shipment_id",
+          "route_plan_id"
+        ]
+      }
+    ],
+    "operation_counts": {
+      "arrivals_enumerated": 8,
+      "arrivals_overlapping": 0,
+      "departures_enumerated": 4,
+      "departures_overlapping": 0,
+      "transfers_enumerated": 0,
+      "transfers_overlapping": 0,
+      "unique_affected_shipments": 0
+    },
+    "overlapping_operations": {
+      "arrivals": [],
+      "departures": [],
+      "transfers": []
+    },
+    "source_record_scope": {
+      "planned_legs_scanned": 2936,
+      "plans_scanned": 1500
+    }
+  },
+  "label_version": "1.0",
+  "observed_execution": {
+    "comparison_status": "COMPARED_AFTER_INDEPENDENT_LABEL_GENERATION",
+    "phase3": {
+      "affected_shipment_ids": [],
+      "agrees_with_independent_membership": true,
+      "output_refs": [
+        "data\\simulations\\phase5\\phase5_2b\\SC-012\\phase3\\shipment_impacts.json",
+        "data\\simulations\\phase5\\phase5_2b\\SC-012\\phase3\\summary.json"
+      ],
+      "output_sha256": {
+        "shipment_impacts.json": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "summary.json": "c4e4d4be1bafc674c01d56224fcd3d1a254de91123983cc0eb2c8fc81d9e6706"
+      },
+      "summary": {
+        "affected_shipments": 0,
+        "blocked_count": 0,
+        "directly_affected": 0,
+        "disrupted_legs": 0,
+        "earliest_affected_operation": null,
+        "event_types": [
+          "PORT_CLOSURE"
+        ],
+        "indirectly_affected": 0,
+        "latest_affected_operation": null,
+        "no_recovery_statuses": {
+          "BLOCKED": 0,
+          "DEADLINE_MISSED": 0,
+          "DELAYED": 0,
+          "OUTCOME_UNDETERMINED": 0,
+          "UNAFFECTED": 1500,
+          "UNRESOLVED_CONNECTION": 0
+        },
+        "scenario_id": "SC-012",
+        "status_percentages": {
+          "BLOCKED": 0,
+          "DEADLINE_MISSED": 0,
+          "DELAYED": 0,
+          "OUTCOME_UNDETERMINED": 0,
+          "UNAFFECTED": 100,
+          "UNRESOLVED_CONNECTION": 0
+        },
+        "total_shipments": 1500,
+        "unaffected": 1500,
+        "unresolved_count": 0
+      }
+    },
+    "phase4": {
+      "affected_shipment_statuses": {},
+      "agrees_with_independent_membership": true,
+      "missing_information": {},
+      "non_unchanged_shipment_ids": [],
+      "output_refs": [
+        "data\\simulations\\phase5\\phase5_2b\\SC-012\\phase4\\recovery_results.json",
+        "data\\simulations\\phase5\\phase5_2b\\SC-012\\phase4\\summary.json"
+      ],
+      "output_sha256": {
+        "recovery_results.json": "ff9957746dfdedf97de659b812cd79e3548d8b573d80129f5b2908a27e6d4000",
+        "summary.json": "6c4e2f61c967c682ffc0f6379b01e1f521bce76a969b0c27c22e6691a6659324"
+      },
+      "reason_codes": {},
+      "recovery_plan": {},
+      "status_distribution": {
+        "DEADLINE_INFEASIBLE": 0,
+        "NO_FEASIBLE_ROUTE": 0,
+        "NO_REROUTE_REQUIRED": 0,
+        "OPERATOR_INTERVENTION_REQUIRED": 0,
+        "RECOVERED": 0,
+        "SEARCH_LIMIT_REACHED": 0,
+        "UNCHANGED": 1500
+      }
+    }
+  },
+  "provenance": {
+    "canonical_file_sha256": {
+      "ports.json": "d6c5eb8baf1499e322283771acc208ccba2a6a1eefdb7bdc4b85467179f713ed",
+      "route_plans.json": "d2e2fef7184ab0b957369ff9c3dd442e6e052a0131d5901ad1400234564740cf",
+      "services.json": "e39e0e5ec162e469a96c379ba8b0b52fcd29ba41960ccbc7dc9518455a727bc0",
+      "shipments.json": "5b22521748fa2ee68e38bcad5464e58f0e326d42b29e47a8b4f38a3864524e95"
+    },
+    "dataset_build": "research_1500",
+    "dataset_manifest_sha256": "b2323fc9c0b3d251bb234346157770e66746eaeaed4c51063a3cd59b9759ff46",
+    "notice_sha256": "8d3c6a71864cda47f031094b2027c0c09daf8ca0c07587be0ab69c57ba0a27b9",
+    "recovery_policy_id": "modeled-periodic-v1",
+    "recovery_policy_sha256": "93e8627763eb40e6872e437fa5c56ffd1b7e41607bbb52bc40c1e19757040ef0",
+    "scenario_sha256": "8edefa490ff1bc9c75b47886d3518e945469cdc20204397abba2016ee92e949f",
+    "verification_code_commit": "3a7d7d65b87037fd18e31d06a3eefc2d164c8870",
+    "verification_date": "2026-11-15",
+    "verification_script_sha256": "9feb6b53e7448c89cd33e1ca78a4b94c56e97aa92349aea5605c44c7deddc66a",
+    "verification_script_version": "phase5-independent-first-batch-1.0.0"
+  },
+  "review_notes": "The empty impact set is supported by the complete modeled operation scan. All shipments remain unchanged; no recovery action or route is warranted.",
+  "scenario_id": "SC-012",
+  "unaffected_recovery_classification": {
+    "cohort_rule": "All 1,500 canonical shipment records; no planned operation at ARBUE overlaps the event window.",
+    "recovery_plans_expected": 0,
+    "shipment_count": 1500,
+    "status": "UNCHANGED"
+  },
+  "verification_method": {
+    "author_role": "Student verification against the frozen modeled dataset and stated rules; no maritime expert review claimed.",
+    "epoch_utc": "2025-01-01T00:00:00Z",
+    "interval_rule": "Half-open [start_time, end_time)",
+    "method": "Independent raw-record reconstruction; no Phase 3/Phase 4 modules are imported or called to generate expected labels."
+  },
+  "verification_status": "VERIFIED"
+}

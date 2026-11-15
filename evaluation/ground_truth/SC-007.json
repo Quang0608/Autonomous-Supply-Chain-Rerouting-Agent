@@ -1,0 +1,1113 @@
+{
+  "agent_notice_ref": {
+    "path": "examples/phase5/SC-007/notice.txt",
+    "sha256": "9768ddf2b7cb3a488a6d9b32ca9f6e89e61d185332d83990e55bbfba5f9bd0cf"
+  },
+  "evidence_refs": [
+    "SC-007-EVIDENCE-DEPARTURES",
+    "SC-007-EVIDENCE-PROPAGATION",
+    "SC-007-EVIDENCE-RECORD-JOIN"
+  ],
+  "expected_impact": {
+    "affected_shipment_ids": [
+      "SHIP-000001"
+    ],
+    "affected_shipments": [
+      {
+        "direct_leg_ids": [
+          "PLAN-SHIP-000001:L2"
+        ],
+        "direct_or_indirect": "DIRECT_AND_INDIRECT",
+        "evidence_ids": [
+          "SC-007-EVIDENCE-DEPARTURES",
+          "SC-007-EVIDENCE-PROPAGATION"
+        ],
+        "indirect_leg_ids": [
+          "PLAN-SHIP-000001:L3"
+        ],
+        "leg_ids": [
+          "PLAN-SHIP-000001:L2",
+          "PLAN-SHIP-000001:L3"
+        ],
+        "reason_codes": [
+          "RECOVERED_CONNECTION",
+          "SERVICE_DELAY_DEPARTURE_OVERLAP"
+        ],
+        "shipment_id": "SHIP-000001"
+      }
+    ],
+    "unaffected_shipment_count": 1499,
+    "unaffected_shipments_or_cohort_rule": "Every planned leg using the target service was enumerated; a shipment is directly affected when a planned departure lies in the half-open event window. Other shipment IDs among the 1,500 joined records are unaffected by this event."
+  },
+  "expected_missing_information": [],
+  "expected_recovery": [
+    {
+      "expected_safe_agent_behavior": "Retain the original itinerary and report the one-hour delay; do not generate an alternative recovery route.",
+      "independent_feasibility": "NOT_APPLICABLE",
+      "original_itinerary_continuation": "FEASIBLE",
+      "reason": "The delayed arrival plus the next leg's 12-hour minimum transfer remains before its fixed planned departure, and the unchanged downstream schedule meets the delivery deadline.",
+      "reference_routes": [],
+      "required_constraints": [
+        "Keep downstream planned departures fixed.",
+        "Apply minimum transfer before the next departure.",
+        "Compare final modeled ETA with shipment delivery deadline."
+      ],
+      "shipment_id": "SHIP-000001"
+    }
+  ],
+  "hidden_reference_event": {
+    "events": [
+      {
+        "delay_hours": 1,
+        "end_time": "2025-10-01T01:00:00Z",
+        "event_id": "SC-007-E1",
+        "semantics": "DEPARTURE_WINDOW",
+        "start_time": "2025-10-01T00:00:00Z",
+        "target_service_id": "SVC-35a7482f2af1d0",
+        "type": "SERVICE_DELAY"
+      }
+    ],
+    "required_clarification": [],
+    "unresolved_fields": [],
+    "valid_event_expected": true
+  },
+  "independent_calculation": {
+    "affected_shipment_ids": [
+      "SHIP-000001"
+    ],
+    "delay_seconds": 3600,
+    "event_interval_utc": {
+      "end": "2025-10-01T01:00:00Z",
+      "start": "2025-10-01T00:00:00Z"
+    },
+    "evidence": [
+      {
+        "enumerated_service_departures": [
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000001:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000001",
+            "planned_arrival": "2025-10-21T09:42:54.72Z",
+            "planned_time": "2025-10-01T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000001",
+            "within_event_window": true
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000002:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000002",
+            "planned_arrival": "2025-06-17T09:42:54.72Z",
+            "planned_time": "2025-05-28T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000002",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000025:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000025",
+            "planned_arrival": "2025-04-01T09:42:54.72Z",
+            "planned_time": "2025-03-12T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000025",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000026:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000026",
+            "planned_arrival": "2025-09-30T09:42:54.72Z",
+            "planned_time": "2025-09-10T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000026",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000045:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000045",
+            "planned_arrival": "2025-04-22T09:42:54.72Z",
+            "planned_time": "2025-04-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000045",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000046:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000046",
+            "planned_arrival": "2025-10-14T09:42:54.72Z",
+            "planned_time": "2025-09-24T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000046",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000091:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000091",
+            "planned_arrival": "2025-08-12T09:42:54.72Z",
+            "planned_time": "2025-07-23T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000091",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000092:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000092",
+            "planned_arrival": "2025-03-11T09:42:54.72Z",
+            "planned_time": "2025-02-19T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000092",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000109:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000109",
+            "planned_arrival": "2025-04-22T09:42:54.72Z",
+            "planned_time": "2025-04-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000109",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000110:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000110",
+            "planned_arrival": "2026-01-06T09:42:54.72Z",
+            "planned_time": "2025-12-17T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000110",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000147:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000147",
+            "planned_arrival": "2025-02-04T09:42:54.72Z",
+            "planned_time": "2025-01-15T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000147",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000148:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000148",
+            "planned_arrival": "2025-10-28T09:42:54.72Z",
+            "planned_time": "2025-10-08T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000148",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000155:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000155",
+            "planned_arrival": "2025-04-15T09:42:54.72Z",
+            "planned_time": "2025-03-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000155",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000156:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000156",
+            "planned_arrival": "2025-02-25T09:42:54.72Z",
+            "planned_time": "2025-02-05T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000156",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000189:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000189",
+            "planned_arrival": "2025-12-16T09:42:54.72Z",
+            "planned_time": "2025-11-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000189",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000190:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000190",
+            "planned_arrival": "2025-10-07T09:42:54.72Z",
+            "planned_time": "2025-09-17T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000190",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000213:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000213",
+            "planned_arrival": "2025-07-08T09:42:54.72Z",
+            "planned_time": "2025-06-18T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000213",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000214:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000214",
+            "planned_arrival": "2025-10-07T09:42:54.72Z",
+            "planned_time": "2025-09-17T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000214",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000309:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000309",
+            "planned_arrival": "2025-07-01T09:42:54.72Z",
+            "planned_time": "2025-06-11T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000309",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000310:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000310",
+            "planned_arrival": "2026-01-06T09:42:54.72Z",
+            "planned_time": "2025-12-17T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000310",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000313:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000313",
+            "planned_arrival": "2025-09-23T09:42:54.72Z",
+            "planned_time": "2025-09-03T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000313",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000314:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000314",
+            "planned_arrival": "2025-05-27T09:42:54.72Z",
+            "planned_time": "2025-05-07T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000314",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000331:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000331",
+            "planned_arrival": "2025-03-18T09:42:54.72Z",
+            "planned_time": "2025-02-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000331",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000332:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000332",
+            "planned_arrival": "2025-06-17T09:42:54.72Z",
+            "planned_time": "2025-05-28T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000332",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000335:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000335",
+            "planned_arrival": "2025-11-11T09:42:54.72Z",
+            "planned_time": "2025-10-22T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000335",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000336:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000336",
+            "planned_arrival": "2025-04-15T09:42:54.72Z",
+            "planned_time": "2025-03-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000336",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000353:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000353",
+            "planned_arrival": "2025-09-09T09:42:54.72Z",
+            "planned_time": "2025-08-20T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000353",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000354:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000354",
+            "planned_arrival": "2025-08-12T09:42:54.72Z",
+            "planned_time": "2025-07-23T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000354",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000359:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000359",
+            "planned_arrival": "2025-04-22T09:42:54.72Z",
+            "planned_time": "2025-04-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000359",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000360:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000360",
+            "planned_arrival": "2025-05-20T09:42:54.72Z",
+            "planned_time": "2025-04-30T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000360",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000379:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000379",
+            "planned_arrival": "2025-12-23T09:42:54.72Z",
+            "planned_time": "2025-12-03T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000379",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000380:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000380",
+            "planned_arrival": "2025-12-23T09:42:54.72Z",
+            "planned_time": "2025-12-03T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000380",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000389:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000389",
+            "planned_arrival": "2025-09-02T09:42:54.72Z",
+            "planned_time": "2025-08-13T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000389",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000390:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000390",
+            "planned_arrival": "2025-06-03T09:42:54.72Z",
+            "planned_time": "2025-05-14T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000390",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000423:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000423",
+            "planned_arrival": "2025-12-09T09:42:54.72Z",
+            "planned_time": "2025-11-19T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000423",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000424:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000424",
+            "planned_arrival": "2025-09-30T09:42:54.72Z",
+            "planned_time": "2025-09-10T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000424",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000443:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000443",
+            "planned_arrival": "2025-12-23T09:42:54.72Z",
+            "planned_time": "2025-12-03T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000443",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000444:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000444",
+            "planned_arrival": "2025-07-22T09:42:54.72Z",
+            "planned_time": "2025-07-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000444",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000455:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000455",
+            "planned_arrival": "2025-04-29T09:42:54.72Z",
+            "planned_time": "2025-04-09T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000455",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000456:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000456",
+            "planned_arrival": "2026-01-13T09:42:54.72Z",
+            "planned_time": "2025-12-24T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000456",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000523:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000523",
+            "planned_arrival": "2026-02-03T09:42:54.72Z",
+            "planned_time": "2026-01-14T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000523",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000524:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000524",
+            "planned_arrival": "2025-05-27T09:42:54.72Z",
+            "planned_time": "2025-05-07T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000524",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000555:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000555",
+            "planned_arrival": "2025-06-10T09:42:54.72Z",
+            "planned_time": "2025-05-21T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000555",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000556:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000556",
+            "planned_arrival": "2025-09-23T09:42:54.72Z",
+            "planned_time": "2025-09-03T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000556",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000561:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000561",
+            "planned_arrival": "2025-03-04T09:42:54.72Z",
+            "planned_time": "2025-02-12T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000561",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000562:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000562",
+            "planned_arrival": "2025-04-01T09:42:54.72Z",
+            "planned_time": "2025-03-12T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000562",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000567:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000567",
+            "planned_arrival": "2025-07-29T09:42:54.72Z",
+            "planned_time": "2025-07-09T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000567",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000568:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000568",
+            "planned_arrival": "2025-02-18T09:42:54.72Z",
+            "planned_time": "2025-01-29T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000568",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000575:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000575",
+            "planned_arrival": "2025-04-22T09:42:54.72Z",
+            "planned_time": "2025-04-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000575",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000576:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000576",
+            "planned_arrival": "2025-05-20T09:42:54.72Z",
+            "planned_time": "2025-04-30T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000576",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000619:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000619",
+            "planned_arrival": "2025-04-29T09:42:54.72Z",
+            "planned_time": "2025-04-09T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000619",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000620:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000620",
+            "planned_arrival": "2025-03-18T09:42:54.72Z",
+            "planned_time": "2025-02-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000620",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000625:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000625",
+            "planned_arrival": "2025-04-15T09:42:54.72Z",
+            "planned_time": "2025-03-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000625",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000626:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000626",
+            "planned_arrival": "2025-02-25T09:42:54.72Z",
+            "planned_time": "2025-02-05T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000626",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000741:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000741",
+            "planned_arrival": "2025-09-30T09:42:54.72Z",
+            "planned_time": "2025-09-10T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000741",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000742:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000742",
+            "planned_arrival": "2025-04-22T09:42:54.72Z",
+            "planned_time": "2025-04-02T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000742",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000809:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000809",
+            "planned_arrival": "2025-12-02T09:42:54.72Z",
+            "planned_time": "2025-11-12T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000809",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000810:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000810",
+            "planned_arrival": "2025-04-15T09:42:54.72Z",
+            "planned_time": "2025-03-26T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000810",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000811:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000811",
+            "planned_arrival": "2025-03-04T09:42:54.72Z",
+            "planned_time": "2025-02-12T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000811",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000812:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000812",
+            "planned_arrival": "2025-05-13T09:42:54.72Z",
+            "planned_time": "2025-04-23T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000812",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000819:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000819",
+            "planned_arrival": "2025-03-11T09:42:54.72Z",
+            "planned_time": "2025-02-19T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000819",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000820:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000820",
+            "planned_arrival": "2025-02-04T09:42:54.72Z",
+            "planned_time": "2025-01-15T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000820",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000833:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000833",
+            "planned_arrival": "2026-01-27T09:42:54.72Z",
+            "planned_time": "2026-01-07T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000833",
+            "within_event_window": false
+          },
+          {
+            "destination_port_id": "NLRTM",
+            "leg_id": "PLAN-SHIP-000834:L2",
+            "operation": "DEPARTURE",
+            "origin_port_id": "SGSIN",
+            "plan_id": "PLAN-SHIP-000834",
+            "planned_arrival": "2025-05-13T09:42:54.72Z",
+            "planned_time": "2025-04-23T00:00:00Z",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000834",
+            "within_event_window": false
+          }
+        ],
+        "evidence_id": "SC-007-EVIDENCE-DEPARTURES",
+        "source_file": "data/builds/research_1500/route_plans.json",
+        "source_record_keys": [
+          "route_plan_id",
+          "shipment_id",
+          "ordered_legs[].service_id",
+          "ordered_legs[].planned_departure"
+        ]
+      },
+      {
+        "calculations": [
+          {
+            "deadline_met": true,
+            "delay_seconds": 3600,
+            "delayed_arrival": "2025-10-21T10:42:54.72Z",
+            "delivery_deadline": "2025-11-01T00:00:00Z",
+            "direct_leg_id": "PLAN-SHIP-000001:L2",
+            "downstream_connections": [
+              {
+                "connection_feasible": true,
+                "earliest_connection_ready": "2025-10-21T22:42:54.72Z",
+                "fixed_next_departure": "2025-10-22T00:00:00Z",
+                "from_leg_id": "PLAN-SHIP-000001:L2",
+                "inbound_arrival": "2025-10-21T10:42:54.72Z",
+                "minimum_transfer_hours": 12,
+                "next_leg_id": "PLAN-SHIP-000001:L3",
+                "remaining_slack_seconds": 4625.28,
+                "remaining_slack_text": "1h 17m 5.28s",
+                "transfer_port_id": "NLRTM"
+              }
+            ],
+            "fixed_itinerary_continuable": true,
+            "leg_evidence": [
+              {
+                "delay_hours": 1,
+                "delayed_arrival": "2025-10-21T10:42:54.72Z",
+                "kind": "DIRECT_DELAY",
+                "leg_id": "PLAN-SHIP-000001:L2",
+                "planned_arrival": "2025-10-21T09:42:54.72Z",
+                "planned_departure": "2025-10-01T00:00:00Z",
+                "reason_code": "SERVICE_DELAY_DEPARTURE_OVERLAP"
+              },
+              {
+                "kind": "DOWNSTREAM_CONNECTION",
+                "leg_id": "PLAN-SHIP-000001:L3",
+                "reason_code": "RECOVERED_CONNECTION"
+              }
+            ],
+            "modeled_final_eta": "2025-10-24T08:45:44.64Z",
+            "plan_id": "PLAN-SHIP-000001",
+            "planned_departure": "2025-10-01T00:00:00Z",
+            "planned_inbound_arrival": "2025-10-21T09:42:54.72Z",
+            "pre_delay_connection_buffer_seconds": 8225.28,
+            "pre_delay_connection_buffer_text": "2h 17m 5.28s",
+            "safe_recovery_decision": "NO_REROUTE_REQUIRED",
+            "service_id": "SVC-35a7482f2af1d0",
+            "shipment_id": "SHIP-000001"
+          }
+        ],
+        "evidence_id": "SC-007-EVIDENCE-PROPAGATION",
+        "source_file": "data/builds/research_1500/route_plans.json",
+        "source_record_keys": [
+          "ordered_legs[].planned_arrival",
+          "ordered_legs[].planned_departure",
+          "ordered_legs[].min_transfer_hours"
+        ]
+      },
+      {
+        "evidence_id": "SC-007-EVIDENCE-RECORD-JOIN",
+        "shipment_records_scanned": 1500,
+        "source_file": "data/builds/research_1500/shipments.json",
+        "source_record_keys": [
+          "shipment_id",
+          "delivery_deadline"
+        ]
+      }
+    ],
+    "matching_departures": [
+      {
+        "destination_port_id": "NLRTM",
+        "leg_id": "PLAN-SHIP-000001:L2",
+        "operation": "DEPARTURE",
+        "origin_port_id": "SGSIN",
+        "plan_id": "PLAN-SHIP-000001",
+        "planned_arrival": "2025-10-21T09:42:54.72Z",
+        "planned_time": "2025-10-01T00:00:00Z",
+        "service_id": "SVC-35a7482f2af1d0",
+        "shipment_id": "SHIP-000001",
+        "within_event_window": true
+      }
+    ],
+    "propagation_and_deadline_calculations": [
+      {
+        "deadline_met": true,
+        "delay_seconds": 3600,
+        "delayed_arrival": "2025-10-21T10:42:54.72Z",
+        "delivery_deadline": "2025-11-01T00:00:00Z",
+        "direct_leg_id": "PLAN-SHIP-000001:L2",
+        "downstream_connections": [
+          {
+            "connection_feasible": true,
+            "earliest_connection_ready": "2025-10-21T22:42:54.72Z",
+            "fixed_next_departure": "2025-10-22T00:00:00Z",
+            "from_leg_id": "PLAN-SHIP-000001:L2",
+            "inbound_arrival": "2025-10-21T10:42:54.72Z",
+            "minimum_transfer_hours": 12,
+            "next_leg_id": "PLAN-SHIP-000001:L3",
+            "remaining_slack_seconds": 4625.28,
+            "remaining_slack_text": "1h 17m 5.28s",
+            "transfer_port_id": "NLRTM"
+          }
+        ],
+        "fixed_itinerary_continuable": true,
+        "leg_evidence": [
+          {
+            "delay_hours": 1,
+            "delayed_arrival": "2025-10-21T10:42:54.72Z",
+            "kind": "DIRECT_DELAY",
+            "leg_id": "PLAN-SHIP-000001:L2",
+            "planned_arrival": "2025-10-21T09:42:54.72Z",
+            "planned_departure": "2025-10-01T00:00:00Z",
+            "reason_code": "SERVICE_DELAY_DEPARTURE_OVERLAP"
+          },
+          {
+            "kind": "DOWNSTREAM_CONNECTION",
+            "leg_id": "PLAN-SHIP-000001:L3",
+            "reason_code": "RECOVERED_CONNECTION"
+          }
+        ],
+        "modeled_final_eta": "2025-10-24T08:45:44.64Z",
+        "plan_id": "PLAN-SHIP-000001",
+        "planned_departure": "2025-10-01T00:00:00Z",
+        "planned_inbound_arrival": "2025-10-21T09:42:54.72Z",
+        "pre_delay_connection_buffer_seconds": 8225.28,
+        "pre_delay_connection_buffer_text": "2h 17m 5.28s",
+        "safe_recovery_decision": "NO_REROUTE_REQUIRED",
+        "service_id": "SVC-35a7482f2af1d0",
+        "shipment_id": "SHIP-000001"
+      }
+    ],
+    "source_record_scope": {
+      "planned_legs_scanned": 2936,
+      "plans_scanned": 1500,
+      "target_service_departures_enumerated": 64
+    }
+  },
+  "label_version": "1.0",
+  "observed_execution": {
+    "comparison_status": "COMPARED_AFTER_INDEPENDENT_LABEL_GENERATION",
+    "phase3": {
+      "affected_shipment_ids": [
+        "SHIP-000001"
+      ],
+      "agrees_with_independent_membership": true,
+      "output_refs": [
+        "data\\simulations\\phase5\\phase5_2b\\SC-007\\phase3\\shipment_impacts.json",
+        "data\\simulations\\phase5\\phase5_2b\\SC-007\\phase3\\summary.json"
+      ],
+      "output_sha256": {
+        "shipment_impacts.json": "9229d7e4c58c683dbf65ce3eb1d3fcdb75c412ba91d4a079234037c615eb1172",
+        "summary.json": "d409b72f5267ab80c8825b52e744f27d554b07eff483bb47eac4d8671681b15b"
+      },
+      "summary": {
+        "affected_shipments": 1,
+        "blocked_count": 0,
+        "directly_affected": 1,
+        "disrupted_legs": 2,
+        "earliest_affected_operation": "2025-10-01T00:00:00Z",
+        "event_types": [
+          "SERVICE_DELAY"
+        ],
+        "indirectly_affected": 1,
+        "latest_affected_operation": "2025-10-01T00:00:00Z",
+        "no_recovery_statuses": {
+          "BLOCKED": 0,
+          "DEADLINE_MISSED": 0,
+          "DELAYED": 1,
+          "OUTCOME_UNDETERMINED": 0,
+          "UNAFFECTED": 1499,
+          "UNRESOLVED_CONNECTION": 0
+        },
+        "scenario_id": "SC-007",
+        "status_percentages": {
+          "BLOCKED": 0,
+          "DEADLINE_MISSED": 0,
+          "DELAYED": 0.0667,
+          "OUTCOME_UNDETERMINED": 0,
+          "UNAFFECTED": 99.9333,
+          "UNRESOLVED_CONNECTION": 0
+        },
+        "total_shipments": 1500,
+        "unaffected": 1499,
+        "unresolved_count": 0
+      }
+    },
+    "phase4": {
+      "affected_shipment_statuses": {
+        "SHIP-000001": "NO_REROUTE_REQUIRED"
+      },
+      "agrees_with_independent_membership": true,
+      "missing_information": {
+        "SHIP-000001": []
+      },
+      "non_unchanged_shipment_ids": [
+        "SHIP-000001"
+      ],
+      "output_refs": [
+        "data\\simulations\\phase5\\phase5_2b\\SC-007\\phase4\\recovery_results.json",
+        "data\\simulations\\phase5\\phase5_2b\\SC-007\\phase4\\summary.json"
+      ],
+      "output_sha256": {
+        "recovery_results.json": "0445bf300fcf847a5ecfa11783f7822dac8b8b572cec2a07c93afb4c15ec7a5a",
+        "summary.json": "239fa1d5ff97ce8e6d3b7084b03e81a3f329e76973f64c002ea78b75848c8158"
+      },
+      "reason_codes": {
+        "SHIP-000001": "FIXED_CONNECTION_RECOVERED"
+      },
+      "recovery_plan": {
+        "SHIP-000001": null
+      },
+      "status_distribution": {
+        "DEADLINE_INFEASIBLE": 0,
+        "NO_FEASIBLE_ROUTE": 0,
+        "NO_REROUTE_REQUIRED": 1,
+        "OPERATOR_INTERVENTION_REQUIRED": 0,
+        "RECOVERED": 0,
+        "SEARCH_LIMIT_REACHED": 0,
+        "UNCHANGED": 1499
+      }
+    }
+  },
+  "provenance": {
+    "canonical_file_sha256": {
+      "ports.json": "d6c5eb8baf1499e322283771acc208ccba2a6a1eefdb7bdc4b85467179f713ed",
+      "route_plans.json": "d2e2fef7184ab0b957369ff9c3dd442e6e052a0131d5901ad1400234564740cf",
+      "services.json": "e39e0e5ec162e469a96c379ba8b0b52fcd29ba41960ccbc7dc9518455a727bc0",
+      "shipments.json": "5b22521748fa2ee68e38bcad5464e58f0e326d42b29e47a8b4f38a3864524e95"
+    },
+    "dataset_build": "research_1500",
+    "dataset_manifest_sha256": "b2323fc9c0b3d251bb234346157770e66746eaeaed4c51063a3cd59b9759ff46",
+    "notice_sha256": "9768ddf2b7cb3a488a6d9b32ca9f6e89e61d185332d83990e55bbfba5f9bd0cf",
+    "recovery_policy_id": "modeled-periodic-v1",
+    "recovery_policy_sha256": "93e8627763eb40e6872e437fa5c56ffd1b7e41607bbb52bc40c1e19757040ef0",
+    "scenario_sha256": "f31cd628ab219ea42c5225e2b1f0e34ab0410792ad89f3bc4752f3f7b3fcf222",
+    "verification_code_commit": "3a7d7d65b87037fd18e31d06a3eefc2d164c8870",
+    "verification_date": "2026-11-15",
+    "verification_script_sha256": "9feb6b53e7448c89cd33e1ca78a4b94c56e97aa92349aea5605c44c7deddc66a",
+    "verification_script_version": "phase5-independent-first-batch-1.0.0"
+  },
+  "review_notes": "Direct delay membership, downstream connection evidence, original-itinerary continuation, and alternative-route need are distinct labels. A feasible fixed connection is not an alternative recovery route.",
+  "scenario_id": "SC-007",
+  "verification_method": {
+    "author_role": "Student verification against the frozen modeled dataset and stated rules; no maritime expert review claimed.",
+    "epoch_utc": "2025-01-01T00:00:00Z",
+    "interval_rule": "Half-open [start_time, end_time)",
+    "method": "Independent raw-record reconstruction; no Phase 3/Phase 4 modules are imported or called to generate expected labels."
+  },
+  "verification_status": "VERIFIED"
+}
